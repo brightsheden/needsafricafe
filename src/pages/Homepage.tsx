@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import DonationForm from '@/components/Shared/DonationForm';
 import ImpactCounter from '@/components/Shared/ImpactCounter';
 import ProgramCard from '@/components/Shared/ProgramCard';
+import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { ArrowRight, Heart, Users, Globe, CheckCircle } from 'lucide-react';
 import heroImage from '@/assets/hero-image.jpg';
 import educationImage from '@/assets/education-program.jpg';
@@ -11,6 +12,12 @@ import healthcareImage from '@/assets/healthcare-program.jpg';
 import environmentImage from '@/assets/environment-program.jpg';
 
 const Homepage = () => {
+  // Scroll animations for each section
+  const programsSection = useScrollAnimation();
+  const testimonialsSection = useScrollAnimation();
+  const newsletterSection = useScrollAnimation();
+  const ctaSection = useScrollAnimation();
+
   const impactStats = [
     { number: 15000, label: 'Lives Transformed', suffix: '+' },
     { number: 127, label: 'Projects Completed' },
@@ -104,9 +111,13 @@ const Homepage = () => {
       <ImpactCounter stats={impactStats} />
 
       {/* Programs Preview */}
-      <section className="py-20 bg-background">
+      <section ref={programsSection.ref} className="py-20 bg-background">
         <div className="container mx-auto max-w-7xl px-6">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 transition-all duration-700 ${
+            programsSection.isVisible 
+              ? 'opacity-100 transform translate-y-0' 
+              : 'opacity-0 transform translate-y-8'
+          }`}>
             <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
               Our Core Programs
             </h2>
@@ -117,15 +128,28 @@ const Homepage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredPrograms.map((program, index) => (
-              <ProgramCard
+              <div
                 key={index}
-                {...program}
-                variant={index === 0 ? 'featured' : 'default'}
-              />
+                className={`transition-all duration-700 ${
+                  programsSection.isVisible 
+                    ? 'opacity-100 transform translate-y-0' 
+                    : 'opacity-0 transform translate-y-8'
+                }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
+              >
+                <ProgramCard
+                  {...program}
+                  variant={index === 0 ? 'featured' : 'default'}
+                />
+              </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          <div className={`text-center mt-12 transition-all duration-700 ${
+            programsSection.isVisible 
+              ? 'opacity-100 transform translate-y-0' 
+              : 'opacity-0 transform translate-y-8'
+          }`} style={{ transitionDelay: '450ms' }}>
             <Button variant="default" size="lg">
               View All Programs
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -135,9 +159,13 @@ const Homepage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-muted/30">
+      <section ref={testimonialsSection.ref} className="py-20 bg-muted/30">
         <div className="container mx-auto max-w-7xl px-6">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 transition-all duration-700 ${
+            testimonialsSection.isVisible 
+              ? 'opacity-100 transform translate-y-0' 
+              : 'opacity-0 transform translate-y-8'
+          }`}>
             <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
               Stories of Hope
             </h2>
@@ -148,30 +176,44 @@ const Homepage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-gradient-card shadow-medium hover:shadow-strong transition-all duration-300">
-                <CardContent className="p-8">
-                  <div className="mb-6">
-                    <Heart className="h-8 w-8 text-primary mb-4" />
-                    <p className="text-lg leading-relaxed italic">
-                      "{testimonial.text}"
-                    </p>
-                  </div>
-                  <div className="border-t pt-4">
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-muted-foreground">{testimonial.location}</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <div
+                key={index}
+                className={`transition-all duration-700 ${
+                  testimonialsSection.isVisible 
+                    ? 'opacity-100 transform translate-y-0 scale-100' 
+                    : 'opacity-0 transform translate-y-8 scale-95'
+                }`}
+                style={{ transitionDelay: `${index * 200}ms` }}
+              >
+                <Card className="bg-gradient-card shadow-medium hover:shadow-strong transition-all duration-300">
+                  <CardContent className="p-8">
+                    <div className="mb-6">
+                      <Heart className="h-8 w-8 text-primary mb-4" />
+                      <p className="text-lg leading-relaxed italic">
+                        "{testimonial.text}"
+                      </p>
+                    </div>
+                    <div className="border-t pt-4">
+                      <p className="font-semibold">{testimonial.author}</p>
+                      <p className="text-muted-foreground">{testimonial.location}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Newsletter & Social */}
-      <section className="py-20 bg-primary/5">
+      <section ref={newsletterSection.ref} className="py-20 bg-primary/5">
         <div className="container mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div className={`transition-all duration-700 ${
+              newsletterSection.isVisible 
+                ? 'opacity-100 transform translate-x-0' 
+                : 'opacity-0 transform -translate-x-8'
+            }`}>
               <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
                 Stay Connected
               </h2>
@@ -192,46 +234,58 @@ const Homepage = () => {
               </div>
             </div>
 
-            <Card className="shadow-medium">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-4">Join Our Community</h3>
-                <p className="text-muted-foreground mb-6">
-                  Subscribe to our newsletter and be part of the change.
-                </p>
-                <div className="space-y-4">
-                  <input
-                    type="email"
-                    placeholder="Enter your email address"
-                    className="w-full px-4 py-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <Button variant="default" size="lg" className="w-full">
-                    Subscribe Now
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className={`transition-all duration-700 ${
+              newsletterSection.isVisible 
+                ? 'opacity-100 transform translate-x-0' 
+                : 'opacity-0 transform translate-x-8'
+            }`} style={{ transitionDelay: '300ms' }}>
+              <Card className="shadow-medium">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-bold mb-4">Join Our Community</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Subscribe to our newsletter and be part of the change.
+                  </p>
+                  <div className="space-y-4">
+                    <input
+                      type="email"
+                      placeholder="Enter your email address"
+                      className="w-full px-4 py-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <Button variant="default" size="lg" className="w-full">
+                      Subscribe Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-gradient-impact text-white">
+      <section ref={ctaSection.ref} className="py-20 bg-gradient-impact text-white">
         <div className="container mx-auto max-w-7xl px-6 text-center">
-          <Globe className="h-16 w-16 mx-auto mb-6 text-primary" />
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Ready to Make a Difference?
-          </h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
-            Every action counts. Whether you donate, volunteer, or simply spread the word, 
-            you're helping us build a better world for everyone.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
-              Donate Today
-            </Button>
-            <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-secondary">
-              Become a Volunteer
-            </Button>
+          <div className={`transition-all duration-700 ${
+            ctaSection.isVisible 
+              ? 'opacity-100 transform translate-y-0 scale-100' 
+              : 'opacity-0 transform translate-y-8 scale-95'
+          }`}>
+            <Globe className="h-16 w-16 mx-auto mb-6 text-primary" />
+            <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
+              Ready to Make a Difference?
+            </h2>
+            <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
+              Every action counts. Whether you donate, volunteer, or simply spread the word, 
+              you're helping us build a better world for everyone.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
+                Donate Today
+              </Button>
+              <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-secondary">
+                Become a Volunteer
+              </Button>
+            </div>
           </div>
         </div>
       </section>
