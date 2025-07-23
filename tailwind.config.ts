@@ -61,7 +61,27 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// NGO Theme Colors
+				'ngo-orange': 'hsl(var(--ngo-orange))',
+				'ngo-orange-light': 'hsl(var(--ngo-orange-light))',
+				'ngo-green': 'hsl(var(--ngo-green))',
+				'ngo-green-light': 'hsl(var(--ngo-green-light))'
+			},
+			fontFamily: {
+				'sans': ['Inter', 'system-ui', 'sans-serif'],
+				'serif': ['Playfair Display', 'serif'],
+				'heading': ['Poppins', 'system-ui', 'sans-serif']
+			},
+			backgroundImage: {
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-impact': 'var(--gradient-impact)',
+				'gradient-card': 'var(--gradient-card)'
+			},
+			boxShadow: {
+				'soft': 'var(--shadow-soft)',
+				'medium': 'var(--shadow-medium)',
+				'strong': 'var(--shadow-strong)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
