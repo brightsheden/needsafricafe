@@ -117,51 +117,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto max-w-7xl px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-              Our Journey
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              From humble beginnings to global impact, here are the key milestones that have shaped our organization.
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary/30"></div>
-              
-              {milestones.map((milestone, index) => (
-                <div key={index} className="relative flex items-start mb-12">
-                  {/* Timeline dot */}
-                  <div className="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
-                  
-                  {/* Content */}
-                  <div className="ml-16">
-                    <Card className="shadow-medium hover:shadow-strong transition-all duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                          <h3 className="text-xl font-bold font-heading">{milestone.event}</h3>
-                          <Badge variant="secondary" className="mt-2 sm:mt-0 w-fit">
-                            {milestone.year}
-                          </Badge>
-                        </div>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {milestone.description}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
    
 
       {/* Call to Action */}

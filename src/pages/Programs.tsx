@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import ProgramCard from '@/components/Shared/ProgramCard';
+import ProgramCard from '@/components/Shared/ProgramCard'; // Will rename below
 import { 
   Search, 
   Filter, 
@@ -20,13 +20,13 @@ import educationImage from '@/assets/education-program.jpg';
 import healthcareImage from '@/assets/healthcare-program.jpg';
 import environmentImage from '@/assets/environment-program.jpg';
 
-const Programs = () => {
+const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
   const categories = ['All', 'Education', 'Healthcare', 'Environment', 'Community Development'];
 
-  const programs = [
+  const projects = [
     {
       id: 1,
       title: 'Rural Education Initiative',
@@ -137,20 +137,20 @@ const Programs = () => {
     }
   ];
 
-  const filteredPrograms = programs.filter(program => {
-    const matchesCategory = activeFilter === 'All' || program.category === activeFilter;
-    const matchesSearch = program.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         program.description.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredProjects = projects.filter(project => {
+    const matchesCategory = activeFilter === 'All' || project.category === activeFilter;
+    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const categoryStats = categories.slice(1).map(category => {
-    const categoryPrograms = programs.filter(p => p.category === category);
+    const categoryProjects = projects.filter(p => p.category === category);
     return {
       name: category,
-      count: categoryPrograms.length,
-      totalBudget: categoryPrograms.reduce((sum, p) => sum + parseInt(p.budget.replace(/[$,]/g, '')), 0),
-      totalImpact: categoryPrograms.reduce((sum, p) => {
+      count: categoryProjects.length,
+      totalBudget: categoryProjects.reduce((sum, p) => sum + parseInt(p.budget.replace(/[$,]/g, '')), 0),
+      totalImpact: categoryProjects.reduce((sum, p) => {
         const impact = parseInt(p.impact.replace(/[^0-9]/g, ''));
         return sum + impact;
       }, 0)
@@ -164,21 +164,21 @@ const Programs = () => {
         <div className="container mx-auto max-w-7xl px-6">
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-              Our Programs
+              Our Projects
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold font-heading mb-6">
               Comprehensive Solutions for
               <span className="block text-primary">Lasting Change</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Explore our diverse portfolio of programs designed to address the root causes of poverty 
+              Explore our diverse portfolio of projects designed to address the root causes of poverty 
               and create sustainable pathways to prosperity in communities worldwide.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Program Statistics */}
+      {/* Project Statistics */}
       <section className="py-16 bg-background">
         <div className="container mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -194,7 +194,7 @@ const Programs = () => {
                   <h3 className="text-lg font-bold font-heading mb-2">{stat.name}</h3>
                   <div className="space-y-1">
                     <p className="text-2xl font-bold text-primary">{stat.count}</p>
-                    <p className="text-sm text-muted-foreground">Active Programs</p>
+                    <p className="text-sm text-muted-foreground">Active Projects</p>
                   </div>
                 </CardContent>
               </Card>
@@ -212,7 +212,7 @@ const Programs = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Search programs..."
+                placeholder="Search projects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -237,35 +237,35 @@ const Programs = () => {
 
           <div className="mt-4 text-center">
             <p className="text-muted-foreground">
-              Showing {filteredPrograms.length} of {programs.length} programs
+              Showing {filteredProjects.length} of {projects.length} projects
               {activeFilter !== 'All' && ` in ${activeFilter}`}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Programs Grid */}
+      {/* Projects Grid */}
       <section className="py-20 bg-background">
         <div className="container mx-auto max-w-7xl px-6">
-          {filteredPrograms.length === 0 ? (
+          {filteredProjects.length === 0 ? (
             <div className="text-center py-16">
               <Filter className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-2xl font-bold mb-2">No programs found</h3>
+              <h3 className="text-2xl font-bold mb-2">No projects found</h3>
               <p className="text-muted-foreground">
                 Try adjusting your search terms or filter settings.
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPrograms.map((program) => (
+              {filteredProjects.map((project) => (
                 <ProgramCard
-                  key={program.id}
-                  title={program.title}
-                  description={program.description}
-                  image={program.image}
-                  category={program.category}
-                  impact={program.impact}
-                  href={`/programs/${program.id}`}
+                  key={project.id}
+                  title={project.title}
+                  description={project.description}
+                  image={project.image}
+                  category={project.category}
+                  impact={project.impact}
+                  href={`/projects/${project.id}`}
                 />
               ))}
             </div>
@@ -273,16 +273,16 @@ const Programs = () => {
         </div>
       </section>
 
-      {/* Featured Program Detail */}
-      {filteredPrograms.length > 0 && (
+      {/* Featured Project Detail */}
+      {filteredProjects.length > 0 && (
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto max-w-7xl px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-                Featured Program
+                Featured Project
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Take a closer look at one of our flagship programs and see how your support creates lasting impact.
+                Take a closer look at one of our flagship projects and see how your support creates lasting impact.
               </p>
             </div>
 
@@ -290,54 +290,54 @@ const Programs = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="relative">
                   <img
-                    src={programs[0].image}
-                    alt={programs[0].title}
+                    src={projects[0].image}
+                    alt={projects[0].title}
                     className="w-full h-full object-cover rounded-l-lg"
                   />
                   <Badge
                     variant="secondary"
                     className="absolute top-4 left-4 bg-white/90 text-secondary"
                   >
-                    {programs[0].status}
+                    {projects[0].status}
                   </Badge>
                 </div>
                 
                 <div className="p-8">
                   <CardHeader className="p-0 mb-6">
                     <CardTitle className="text-2xl font-heading mb-2">
-                      {programs[0].title}
+                      {projects[0].title}
                     </CardTitle>
                     <p className="text-muted-foreground leading-relaxed">
-                      {programs[0].description}
+                      {projects[0].description}
                     </p>
                   </CardHeader>
 
                   <div className="space-y-6">
-                    {/* Program Details */}
+                    {/* Project Details */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex items-center space-x-2">
                         <MapPin className="h-4 w-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{programs[0].location}</span>
+                        <span className="text-sm text-muted-foreground">{projects[0].location}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Calendar className="h-4 w-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{programs[0].duration}</span>
+                        <span className="text-sm text-muted-foreground">{projects[0].duration}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Target className="h-4 w-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{programs[0].impact}</span>
+                        <span className="text-sm text-muted-foreground">{projects[0].impact}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <DollarSign className="h-4 w-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{programs[0].budget}</span>
+                        <span className="text-sm text-muted-foreground">{projects[0].budget}</span>
                       </div>
                     </div>
 
                     {/* Goals */}
                     <div>
-                      <h4 className="font-semibold mb-3">Program Goals:</h4>
+                      <h4 className="font-semibold mb-3">Project Goals:</h4>
                       <ul className="space-y-2">
-                        {programs[0].goals.map((goal, index) => (
+                        {projects[0].goals.map((goal, index) => (
                           <li key={index} className="flex items-start space-x-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
                             <span className="text-sm text-muted-foreground">{goal}</span>
@@ -348,7 +348,7 @@ const Programs = () => {
 
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button variant="default" className="flex-1">
-                        Support This Program
+                        Support This Project
                       </Button>
                       <Button variant="outline" className="flex-1">
                         Learn More
@@ -370,7 +370,7 @@ const Programs = () => {
             Support a Project Today
           </h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
-            Choose a program that resonates with your values and make a direct impact on the lives 
+            Choose a project that resonates with your values and make a direct impact on the lives 
             of people who need it most. Every contribution, no matter the size, creates lasting change.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -387,4 +387,4 @@ const Programs = () => {
   );
 };
 
-export default Programs;
+export default Projects;
