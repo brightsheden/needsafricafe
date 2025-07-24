@@ -27,24 +27,24 @@ const Homepage = () => {
 
   const featuredPrograms = [
     {
-      title: 'Education for All',
-      description: 'Providing quality education and learning resources to underserved communities, empowering children with knowledge and skills for a brighter future.',
+      title: 'Educational Equipment Distribution',
+      description: ' Supplying schools with lab equipment, computers, and books.',
       image: educationImage,
       category: 'Education',
       impact: '500+ Students',
     },
     {
-      title: 'Healthcare Access',
-      description: 'Delivering essential healthcare services and medical support to remote areas, ensuring everyone has access to basic health needs.',
+      title: 'Medical Equipment Distribution',
+      description: ' Providing hospitals and labs with critical medical equipment and supplies',
       image: healthcareImage,
       category: 'Healthcare',
       impact: '2,000+ Patients',
     },
     {
-      title: 'Environmental Action',
-      description: 'Leading sustainable environmental initiatives that protect our planet while creating economic opportunities for local communities.',
+      title: 'Volunteer and Community Engagement',
+      description: 'Offering opportunities for individuals and organizations to participate in collection, sorting, and advocacy.',
       image: environmentImage,
-      category: 'Environment',
+      category: 'Volunteer',
       impact: '10,000+ Trees',
     },
   ];
@@ -81,12 +81,12 @@ const Homepage = () => {
             {/* Hero Content */}
             <div className="text-white space-y-8 animate-fade-in-up">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight">
-                Transforming Lives,
-                <span className="block text-primary">One Act at a Time</span>
+                NeedsAfrica
+                {/* <span className="block text-primary">One Act at a Time</span> */}
               </h1>
               <p className="text-xl md:text-2xl leading-relaxed text-white/90">
-                Building bridges to hope, opportunity, and lasting change in communities around the world. 
-                Together, we can create a future where everyone thrives.
+                Connecting Donors with Schools and Hospitals in Africa
+ Join us in bridging the gap with educational and medical equipment for Africa.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="hero" size="xl" className="animate-scale-in">

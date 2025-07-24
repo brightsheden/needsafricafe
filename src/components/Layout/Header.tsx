@@ -12,7 +12,7 @@ const Header = () => {
     { name: 'About', href: '/about' },
     { name: 'Mission', href: '/mission' },
     { name: 'Impact', href: '/impact' },
-    { name: 'Programs', href: '/programs' },
+    { name: 'Projects', href: '/programs' },
   ];
 
   const isActive = (href: string) => location.pathname === href;
@@ -22,11 +22,9 @@ const Header = () => {
       <div className="container mx-auto max-w-7xl px-6">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">H</span>
-            </div>
-            <span className="text-xl font-bold font-heading">HopeBridge</span>
+          <Link to="/" className="flex items-center  space-x-2">
+            <img src='logo.png' className='w-40' />
+        
           </Link>
 
           {/* Desktop Navigation */}

@@ -367,7 +367,7 @@ const Programs = () => {
         <div className="container mx-auto max-w-7xl px-6 text-center">
           <Target className="h-16 w-16 mx-auto mb-6 text-primary" />
           <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Support a Program Today
+            Support a Project Today
           </h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
             Choose a program that resonates with your values and make a direct impact on the lives 

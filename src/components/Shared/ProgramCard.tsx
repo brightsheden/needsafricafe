@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface ProgramCardProps {
   title: string;
@@ -64,10 +65,10 @@ const ProgramCard = ({
           className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all"
           asChild
         >
-          <a href={href} className="flex items-center justify-center space-x-2">
+          <Link to={href} className="flex items-center justify-center space-x-2">
             <span>Learn More</span>
             <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </Button>
       </CardFooter>
     </Card>

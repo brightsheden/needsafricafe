@@ -12,14 +12,13 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-                <span className="text-sm font-bold text-primary-foreground">H</span>
-              </div>
-              <span className="text-xl font-bold font-heading text-white">HopeBridge</span>
+             <img src='logo.png' className='w-40' />
             </Link>
             <p className="text-white/90 mb-6 leading-relaxed">
-              Transforming lives through education, healthcare, and community development. 
-              Together, we build bridges to a better future.
+              Connecting Donors with Schools and Hospitals in Africa
+ Join us in bridging the gap with educational and medical equipment for Africa.
+
+
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="icon" className="text-white/80 hover:text-white hover:bg-white/10">
@@ -70,11 +69,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-primary" />
-                <span className="text-white/80">+1 (555) 123-4567</span>
+                <span className="text-white/80">919-699-4012, 832-495-5157</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-primary" />
-                <span className="text-white/80">info@hopebridge.org</span>
+                <span className="text-white/80"> rotimi.adeyinka@needsafrica.org</span>
               </li>
             </ul>
           </div>

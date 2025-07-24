@@ -107,8 +107,7 @@ const Mission = () => {
               <span className="block text-primary">Transforming Lives</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Our mission is to create sustainable pathways out of poverty by providing education, healthcare, 
-              and environmental solutions that empower communities to build their own brighter futures.
+            To improve education and healthcare in Africa by redirecting underutilized resources developed countries to communities that need them most.
             </p>
           </div>
         </div>

@@ -64,20 +64,12 @@ const About = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold font-heading mb-6">
-                Our Mission
+                About Us
               </h2>
               <p className="text-lg leading-relaxed text-muted-foreground mb-6">
-                To create sustainable pathways out of poverty by providing education, healthcare, and economic opportunities 
-                to underserved communities worldwide. We believe that by investing in people and partnering with local leaders, 
-                we can build lasting change that spans generations.
+              NeedsAfrica is a Texas-based nonprofit dedicated to collecting used educational and medical equipment from donors and delivering them to requesting schools, laboratories, and hospitals across Africa. We believe in practical, sustainable action to address equipment shortages and improve education and healthcare.
               </p>
-              <p className="text-lg leading-relaxed text-muted-foreground mb-8">
-                Every project we undertake is designed with sustainability at its core, ensuring that communities can 
-                continue to grow and prosper long after our initial intervention.
-              </p>
-              <Button variant="default" size="lg">
-                Learn About Our Programs
-              </Button>
+             
             </div>
             <div className="relative">
               <img
@@ -170,50 +162,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Founder's Note */}
-      <section className="py-20 bg-primary/5">
-        <div className="container mx-auto max-w-7xl px-6">
-          <Card className="max-w-4xl mx-auto shadow-strong">
-            <CardContent className="p-12">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold font-heading mb-4">A Message from Our Founder</h2>
-              </div>
-              
-              <div className="space-y-6 text-lg leading-relaxed">
-                <p className="text-muted-foreground">
-                  "When I first traveled to rural Guatemala in 2015, I witnessed both heartbreaking poverty and incredible resilience. 
-                  I met families who had so little yet gave so much, children who walked hours to school, and communities that 
-                  supported each other through the toughest challenges."
-                </p>
-                
-                <p className="text-muted-foreground">
-                  "That experience changed my life forever. I realized that sustainable change doesn't come from outsiders 
-                  imposing solutions, but from partnerships built on trust, respect, and shared vision. HopeBridge was born 
-                  from this understanding."
-                </p>
-                
-                <p className="text-muted-foreground">
-                  "Today, eight years later, I'm humbled by how far we've come together. Every school built, every life saved, 
-                  every tree planted represents the power of collective action. But more importantly, it represents hope—hope 
-                  that a better future is not just possible, but inevitable when we work together."
-                </p>
-              </div>
-              
-              <div className="mt-8 pt-8 border-t border-border">
-                <div className="flex items-center">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mr-4">
-                    <span className="text-xl font-bold text-primary">SM</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-lg">Sarah Martinez</p>
-                    <p className="text-muted-foreground">Founder & Executive Director</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+   
 
       {/* Call to Action */}
       <section className="py-20 bg-gradient-impact text-white">
