@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Users, Heart, Award, Target } from 'lucide-react';
-import teamPhoto from '@/assets/team-photo.jpg';
+import aboutPhoto from '@/assets/freepik.jpg'
 
 const About = () => {
   const milestones = [
@@ -45,14 +45,13 @@ const About = () => {
         <div className="container mx-auto max-w-7xl px-6">
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 text-primary border-primary/30">
-              Our Story
+              Our About Us
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold font-heading mb-6">
               Building Bridges to Hope
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Founded in 2016, HopeBridge began with a simple belief: every person deserves the opportunity to thrive. 
-              What started as a small initiative in one community has grown into a global movement for positive change.
+               NeedsAfrica is a Texas-based nonprofit dedicated to collecting used educational and medical equipment from donors and delivering them to requesting schools, laboratories, and hospitals across Africa. We believe in practical, sustainable action to address equipment shortages and improve education and healthcare.
             </p>
           </div>
         </div>
@@ -73,14 +72,14 @@ const About = () => {
             </div>
             <div className="relative">
               <img
-                src={teamPhoto}
+                src={aboutPhoto}
                 alt="HopeBridge team and community members"
                 className="rounded-lg shadow-strong w-full"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
               <div className="absolute bottom-6 left-6 text-white">
-                <p className="text-lg font-semibold">Our team with community leaders</p>
-                <p className="text-white/80">Guatemala, 2024</p>
+                <p className="text-lg font-semibold">NeedsAfrica</p>
+                <p className="text-white/80">Texas, 2024</p>
               </div>
             </div>
           </div>
