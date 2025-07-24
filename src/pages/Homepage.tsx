@@ -158,53 +158,7 @@ const Homepage = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section ref={testimonialsSection.ref} className="py-20 bg-muted/30">
-        <div className="container mx-auto max-w-7xl px-6">
-          <div className={`text-center mb-16 transition-all duration-700 ${
-            testimonialsSection.isVisible 
-              ? 'opacity-100 transform translate-y-0' 
-              : 'opacity-0 transform translate-y-8'
-          }`}>
-            <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-              Stories of Hope
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Real stories from real people whose lives have been transformed through our programs and your generous support.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className={`transition-all duration-700 ${
-                  testimonialsSection.isVisible 
-                    ? 'opacity-100 transform translate-y-0 scale-100' 
-                    : 'opacity-0 transform translate-y-8 scale-95'
-                }`}
-                style={{ transitionDelay: `${index * 200}ms` }}
-              >
-                <Card className="bg-gradient-card shadow-medium hover:shadow-strong transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="mb-6">
-                      <Heart className="h-8 w-8 text-primary mb-4" />
-                      <p className="text-lg leading-relaxed italic">
-                        "{testimonial.text}"
-                      </p>
-                    </div>
-                    <div className="border-t pt-4">
-                      <p className="font-semibold">{testimonial.author}</p>
-                      <p className="text-muted-foreground">{testimonial.location}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
+  
       {/* Newsletter & Social */}
       <section ref={newsletterSection.ref} className="py-20 bg-primary/5">
         <div className="container mx-auto max-w-7xl px-6">
