@@ -132,7 +132,7 @@ const About = () => {
             <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
               Support Our Mission
             </Button>
-            <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-secondary">
+            <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
               Volunteer With Us
             </Button>
           </div>

@@ -65,7 +65,9 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span className="text-white/80">123 Hope Street, Unity City, UC 12345</span>
+                <span className="text-white/80">12645 Memorial Dr
+                    Suite F1 #634
+                    Houston, TX 77024</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-primary" />
@@ -73,7 +75,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-primary" />
-                <span className="text-white/80"> rotimi.adeyinka@needsafrica.org</span>
+                <span className="text-white/80"> info@needsafrica.org</span>
               </li>
             </ul>
           </div>
@@ -101,7 +103,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-white/80 text-sm">
-              © 2024 HopeBridge. All rights reserved.
+              © 2025 NeedsAfrica. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link to="/privacy" className="text-white/80 hover:text-white text-sm transition-colors">

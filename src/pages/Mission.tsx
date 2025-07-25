@@ -295,7 +295,7 @@ const Mission = () => {
             <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
               Support Our Mission
             </Button>
-            <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-secondary">
+            <Button variant="outline" size="xl" className=" border-white hover:bg-white text-secondary">
               Learn About Our Programs
             </Button>
           </div>

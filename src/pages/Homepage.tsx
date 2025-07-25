@@ -93,7 +93,7 @@ const Homepage = () => {
                   Join Our Mission
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-primary animate-scale-in">
+                <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-primary animate-scale-in">
                   Watch Our Story
                 </Button>
               </div>
@@ -236,7 +236,7 @@ const Homepage = () => {
               <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
                 Donate Today
               </Button>
-              <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-secondary">
+              <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
                 Become a Volunteer
               </Button>
             </div>

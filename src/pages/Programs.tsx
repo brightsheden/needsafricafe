@@ -377,7 +377,7 @@ const Projects = () => {
             <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
               Donate Now
             </Button>
-            <Button variant="outline" size="xl" className="text-white border-white hover:bg-white hover:text-secondary">
+            <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
               Become a Monthly Supporter
             </Button>
           </div>
