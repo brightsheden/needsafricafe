@@ -52,11 +52,7 @@ const ProgramCard = ({
         <p className="text-muted-foreground mb-4 leading-relaxed">
           {description}
         </p>
-        <div className="flex items-center space-x-2">
-          <Badge variant="outline" className="text-primary border-primary/30">
-            {impact}
-          </Badge>
-        </div>
+      
       </CardContent>
       
       <CardFooter className="p-6 pt-0">

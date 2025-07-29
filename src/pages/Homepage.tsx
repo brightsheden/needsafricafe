@@ -93,9 +93,7 @@ const Homepage = () => {
                   Join Our Mission
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-primary animate-scale-in">
-                  Watch Our Story
-                </Button>
+               
               </div>
             </div>
 

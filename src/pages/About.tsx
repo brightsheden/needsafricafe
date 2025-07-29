@@ -18,26 +18,25 @@ const About = () => {
   const coreValues = [
     {
       icon: Heart,
-      title: 'Compassion',
-      description: 'We lead with empathy and understanding, recognizing the dignity and potential in every person we serve.'
-    },
-    {
-      icon: Users,
-      title: 'Community',
-      description: 'We believe sustainable change comes from within communities, working alongside local leaders and families.'
-    },
-    {
-      icon: Award,
-      title: 'Excellence',
-      description: 'We strive for the highest standards in everything we do, ensuring maximum impact with every resource.'
+      title: 'Equity & Dignity',
+      description: 'We believe access to education and healthcare is a basic right—not a privilege. We serve with compassion and respect, ensuring every community we support is treated with dignity.'
     },
     {
       icon: Target,
-      title: 'Sustainability',
-      description: 'We focus on long-term solutions that empower communities to thrive independently for generations to come.'
+      title: 'Sustainability & Stewardship',
+      description: 'We maximize the life and impact of valuable resources, reducing waste and acting as responsible stewards of every donation entrusted to us.'
+    },
+    {
+      icon: Award,
+      title: 'Integrity & Accountability',
+      description: 'We are transparent, ethical, and accountable in all we do—ensuring every donation reaches its intended impact with measurable results.'
+    },
+    {
+      icon: Users,
+      title: 'Collaboration & Innovation',
+      description: 'We build smart partnerships and apply creative solutions to connect needs with surplus—bridging gaps through technology, logistics, and teamwork.'
     }
   ];
-
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
