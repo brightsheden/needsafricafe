@@ -11,6 +11,11 @@ import Mission from "./pages/Mission";
 import Impact from "./pages/Impact";
 import Programs from "./pages/Programs";
 import ProgramDetails from "./pages/ProgramDetails";
+import Donate from "./pages/Donate";
+import Contact from "./pages/Contact";
+import DonationManagement from "./pages/admin/DonationManagement";
+import ProjectManagement from "./pages/admin/ProjectManagement";
+import TeamManagement from "./pages/admin/TeamManagement";
 import NotFound from "./pages/NotFound";
 import Projects from "./pages/Programs";
 
@@ -31,6 +36,12 @@ const App = () => (
               <Route path="/mission" element={<Mission />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/:id" element={<ProgramDetails />} />
+              <Route path="/donate" element={<Donate />} />
+              <Route path="/contact" element={<Contact />} />
+              {/* Admin Routes */}
+              <Route path="/admin/donations" element={<DonationManagement />} />
+              <Route path="/admin/projects" element={<ProjectManagement />} />
+              <Route path="/admin/team" element={<TeamManagement />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
