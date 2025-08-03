@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from "@/assets/logo.png"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,7 +24,7 @@ const Header = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center  space-x-2">
-            <img src='logo.png' className='w-40' />
+            <img src={Logo} className='w-40' />
         
           </Link>
 
@@ -45,13 +46,22 @@ const Header = () => {
           </nav>
 
           {/* CTA Buttons */}
+        
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm">
+              <Link to={'/contact'}>
+               <Button variant="outline" size="sm">
               Volunteer
             </Button>
-            <Button variant="donate" size="sm">
+          
+          </Link>
+           
+            <Link to={'/donate'}>
+             <Button variant="donate" size="sm">
               Donate Now
             </Button>
+
+            </Link>
+           
           </div>
 
           {/* Mobile menu button */}

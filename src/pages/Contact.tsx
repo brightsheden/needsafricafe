@@ -193,8 +193,9 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold">Office Address</h3>
                       <p className="text-muted-foreground">
-                        123 Hope Street, Unity District<br />
-                        Lagos, Nigeria 100001
+                        12645 Memorial Dr Suite F1 
+                        <br />
+                        #634 Houston, TX 77024
                       </p>
                     </div>
                   </div>
@@ -203,7 +204,7 @@ const Contact = () => {
                     <Phone className="h-6 w-6 text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold">Phone Number</h3>
-                      <p className="text-muted-foreground">+234 (0) 123 456 7890</p>
+                      <p className="text-muted-foreground">919-699-4012, 832-495-5157</p>
                     </div>
                   </div>
 
@@ -211,17 +212,11 @@ const Contact = () => {
                     <Mail className="h-6 w-6 text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold">Email Address</h3>
-                      <p className="text-muted-foreground">hello@ngowebsite.org</p>
+                      <p className="text-muted-foreground">info@needsafrica.org</p>
                     </div>
                   </div>
 
-                  {/* Simple map placeholder */}
-                  <div className="mt-6 bg-muted rounded-lg h-48 flex items-center justify-center">
-                    <div className="text-center text-muted-foreground">
-                      <MapPin className="h-12 w-12 mx-auto mb-2" />
-                      <p>Interactive Map Coming Soon</p>
-                    </div>
-                  </div>
+   
                 </CardContent>
               </Card>
             </div>
@@ -233,25 +228,7 @@ const Contact = () => {
                 teamRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
             >
-              <h2 className="text-2xl font-bold font-serif mb-6">Direct Team Contact</h2>
-              <div className="space-y-4">
-                {teamContacts.map((contact, index) => (
-                  <Card key={index} className="p-4">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <contact.icon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{contact.name}</h3>
-                        <p className="text-sm text-muted-foreground">{contact.role}</p>
-                      </div>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={`mailto:${contact.email}`}>Contact</a>
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+              
             </div>
           </div>
         </div>

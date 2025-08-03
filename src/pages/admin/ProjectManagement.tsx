@@ -20,6 +20,12 @@ import {
   MapPin,
   DollarSign
 } from 'lucide-react';
+import { useCreateProject, useDeleteProject, useProjects, useUpdateProject } from '@/api/projects';
+import { API_URL } from "../../../config";
+import { Link } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+
 
 const ProjectManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,62 +33,21 @@ const ProjectManagement = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
+  const deleteProjectMutation = useDeleteProject();
+  const { toast } = useToast();
+  const {data:projects, isPending,isError,error} = useProjects({
+    search: searchTerm,
+    category: categoryFilter !== 'all' ? categoryFilter : '',
+    status: statusFilter !== 'all' ? statusFilter : '',
+    page,
+    page_size: pageSize
+  });
+  const createProjectMutation = useCreateProject();
 
-  // Mock project data
-  const projects = [
-    {
-      id: 1,
-      title: 'Clean Water Initiative',
-      description: 'Providing clean water access to rural communities',
-      category: 'Environment',
-      status: 'Active',
-      location: 'Northern Nigeria',
-      goal: 500000,
-      raised: 350000,
-      startDate: '2024-01-01',
-      endDate: '2024-12-31',
-      image: '/education-program.jpg'
-    },
-    {
-      id: 2,
-      title: 'Education for All',
-      description: 'Building schools and providing educational resources',
-      category: 'Education',
-      status: 'Active',
-      location: 'Lagos State',
-      goal: 1000000,
-      raised: 750000,
-      startDate: '2024-02-01',
-      endDate: '2024-11-30',
-      image: '/healthcare-program.jpg'
-    },
-    {
-      id: 3,
-      title: 'Healthcare Outreach',
-      description: 'Mobile health clinics for underserved areas',
-      category: 'Health',
-      status: 'Completed',
-      location: 'Cross River State',
-      goal: 300000,
-      raised: 300000,
-      startDate: '2023-06-01',
-      endDate: '2023-12-31',
-      image: '/environment-program.jpg'
-    },
-    {
-      id: 4,
-      title: 'Youth Empowerment Program',
-      description: 'Skills training and mentorship for young people',
-      category: 'Education',
-      status: 'Draft',
-      location: 'Abuja FCT',
-      goal: 200000,
-      raised: 0,
-      startDate: '2024-03-01',
-      endDate: '2024-08-31',
-      image: '/education-program.jpg'
-    }
-  ];
 
   const [projectForm, setProjectForm] = useState({
     title: '',
@@ -96,19 +61,12 @@ const ProjectManagement = () => {
   });
 
   // Filter projects
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === 'all' || project.category.toLowerCase() === categoryFilter;
-    const matchesStatus = statusFilter === 'all' || project.status.toLowerCase() === statusFilter;
-    
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
 
   // Stats calculations
-  const totalProjects = projects.length;
-  const activeProjects = projects.filter(p => p.status === 'Active').length;
-  const completedProjects = projects.filter(p => p.status === 'Completed').length;
+  const totalProjects = projects?.total || 0;
+  const activeProjects = projects?.data?.filter(project => project.status === 'active').length || 0;
+  const completedProjects = projects?.data?.filter(project => project.status === 'completed').length || 0;
+  const totalPages = projects?.total_pages || 1;
 
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
@@ -136,22 +94,59 @@ const ProjectManagement = () => {
     }
   };
 
-  const handleCreateProject = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Creating project:', projectForm);
-    setShowCreateModal(false);
-    setProjectForm({
-      title: '',
-      description: '',
-      category: '',
-      location: '',
-      goal: '',
-      startDate: '',
-      endDate: '',
-      status: 'Draft'
-    });
-  };
 
+  const handleCreateProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      if (editingProject) {
+        // You can add update logic here if you have an update endpoint
+        setShowCreateModal(false);
+        setEditingProject(null);
+        setProjectForm({
+          title: '',
+          description: '',
+          category: '',
+          location: '',
+          goal: '',
+          startDate: '',
+          endDate: '',
+          status: 'Draft'
+        });
+        return;
+      }
+
+      const data = {
+        payload: {
+          title: projectForm.title,
+          summary: projectForm.description,
+          category: projectForm.category.toLowerCase(),
+          location: projectForm.location || null,
+          target_amount: parseFloat(projectForm.goal) || 0,
+          start_date: projectForm.startDate || null,
+          end_date: projectForm.endDate || null,
+          status: projectForm.status.toLowerCase(),
+        }
+      }
+
+      await createProjectMutation.mutateAsync(data);
+
+      setShowCreateModal(false);
+      setProjectForm({
+        title: '',
+        description: '',
+        category: '',
+        location: '',
+        goal: '',
+        startDate: '',
+        endDate: '',
+        status: 'Draft'
+      });
+    } catch (error) {
+      console.error('Failed to create project:', error);
+      // Optionally show error feedback to user
+    }
+  };
   const handleEditProject = (project: any) => {
     setEditingProject(project);
     setProjectForm({
@@ -167,135 +162,29 @@ const ProjectManagement = () => {
     setShowCreateModal(true);
   };
 
+
+   
+
   return (
     <div className="p-6 space-y-6">
+      <div className="mb-4">
+        <Link to="/admin">
+          <Button variant="outline">Back to Admin Home</Button>
+        </Link>
+      </div>
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold font-serif">Project Management</h1>
           <p className="text-muted-foreground">Create and manage all NGO projects</p>
         </div>
-        <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
+        <Link to={"/admin/projects/create"}>
+         <Button className="gap-2">
               <Plus className="h-4 w-4" />
               Create Project
             </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                {editingProject ? 'Edit Project' : 'Create New Project'}
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleCreateProject} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Project Title</Label>
-                  <Input
-                    value={projectForm.title}
-                    onChange={(e) => setProjectForm({...projectForm, title: e.target.value})}
-                    placeholder="Enter project title"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label>Category</Label>
-                  <Select value={projectForm.category} onValueChange={(value) => setProjectForm({...projectForm, category: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Education">Education</SelectItem>
-                      <SelectItem value="Health">Health</SelectItem>
-                      <SelectItem value="Environment">Environment</SelectItem>
-                      <SelectItem value="Community">Community</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div>
-                <Label>Description</Label>
-                <Textarea
-                  value={projectForm.description}
-                  onChange={(e) => setProjectForm({...projectForm, description: e.target.value})}
-                  placeholder="Describe the project..."
-                  rows={3}
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Location</Label>
-                  <Input
-                    value={projectForm.location}
-                    onChange={(e) => setProjectForm({...projectForm, location: e.target.value})}
-                    placeholder="Project location"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label>Fundraising Goal (₦)</Label>
-                  <Input
-                    type="number"
-                    value={projectForm.goal}
-                    onChange={(e) => setProjectForm({...projectForm, goal: e.target.value})}
-                    placeholder="100000"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <Label>Start Date</Label>
-                  <Input
-                    type="date"
-                    value={projectForm.startDate}
-                    onChange={(e) => setProjectForm({...projectForm, startDate: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label>End Date</Label>
-                  <Input
-                    type="date"
-                    value={projectForm.endDate}
-                    onChange={(e) => setProjectForm({...projectForm, endDate: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label>Status</Label>
-                  <Select value={projectForm.status} onValueChange={(value) => setProjectForm({...projectForm, status: value})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Draft">Draft</SelectItem>
-                      <SelectItem value="Active">Active</SelectItem>
-                      <SelectItem value="Completed">Completed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => {
-                  setShowCreateModal(false);
-                  setEditingProject(null);
-                }}>
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingProject ? 'Update Project' : 'Create Project'}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+        </Link>
+      
       </div>
 
       {/* Stats Overview */}
@@ -360,7 +249,7 @@ const ProjectManagement = () => {
                 <Input
                   placeholder="Search projects..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => { setSearchTerm(e.target.value); setPage(1); }}
                   className="pl-10"
                 />
               </div>
@@ -368,7 +257,7 @@ const ProjectManagement = () => {
 
             <div>
               <Label>Category</Label>
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <Select value={categoryFilter} onValueChange={(val) => { setCategoryFilter(val); setPage(1); }}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -383,7 +272,7 @@ const ProjectManagement = () => {
 
             <div>
               <Label>Status</Label>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setPage(1); }}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -401,14 +290,20 @@ const ProjectManagement = () => {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProjects.map((project) => (
+        {projects?.data?.map((project) => (
           <Card key={project.id} className="overflow-hidden">
             <div className="aspect-video bg-muted relative">
-              <img 
-                src={project.image} 
-                alt={project.title}
-                className="w-full h-full object-cover"
-              />
+              {project.cover_image ? (
+                <img 
+                  src={`${API_URL}${project.cover_image}`} 
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                  No Image
+                </div>
+              )}
               <div className="absolute top-2 right-2 flex gap-2">
                 {getStatusBadge(project.status)}
                 <Badge className={getCategoryColor(project.category)}>
@@ -420,23 +315,25 @@ const ProjectManagement = () => {
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
               <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                {project.description}
+                {project.summary}
               </p>
               
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  {project.location}
-                </div>
+                {project.location && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    {project.location}
+                  </div>
+                )}
                 
                 <div>
                   <div className="flex justify-between text-sm mb-1">
                     <span>Progress</span>
-                    <span>₦{project.raised.toLocaleString()} / ₦{project.goal.toLocaleString()}</span>
+                    <span>{project?.currency} {parseFloat(project.amount_raised).toLocaleString()} / {project?.currency} {parseFloat(project.target_amount).toLocaleString()}</span>
                   </div>
-                  <Progress value={(project.raised / project.goal) * 100} className="h-2" />
+                  <Progress value={project.percentage_funded} className="h-2" />
                   <p className="text-xs text-muted-foreground mt-1">
-                    {Math.round((project.raised / project.goal) * 100)}% funded
+                    {project.percentage_funded}% funded
                   </p>
                 </div>
               </div>
@@ -448,13 +345,16 @@ const ProjectManagement = () => {
                   className="flex-1"
                   onClick={() => handleEditProject(project)}
                 >
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit
+                  <Link to={`/admin/projects/${project.id}/edit`}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </Link>
+                
                 </Button>
                 <Button variant="outline" size="sm">
                   <Archive className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700" onClick={() => { setProjectToDelete(project); setDeleteDialogOpen(true); }}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -462,6 +362,50 @@ const ProjectManagement = () => {
           </Card>
         ))}
       </div>
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-8 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </Button>
+          <span className="px-4 py-2 text-muted-foreground">Page {page} of {totalPages}</span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      )}
+
+
+        <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Confirm Delete"
+        description={`Are you sure you want to delete the project "${projectToDelete?.title}"? This action cannot be undone.`}
+        isLoading={deleteProjectMutation.isPending}
+        onDelete={async () => {
+          if (!projectToDelete) return;
+          try {
+            await deleteProjectMutation.mutateAsync(projectToDelete.id);
+            toast({ title: 'Project deleted successfully!' });
+          } catch (err) {
+            toast({ title: 'Failed to delete project', description: err?.message || 'An error occurred', variant: 'destructive' });
+          } finally {
+            setDeleteDialogOpen(false);
+            setProjectToDelete(null);
+          }
+        }}
+        onCancel={() => { setDeleteDialogOpen(false); setProjectToDelete(null); }}
+      />
     </div>
   );
 };

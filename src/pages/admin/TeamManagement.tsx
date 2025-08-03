@@ -21,6 +21,7 @@ import {
   Shield,
   Upload
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const TeamManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -171,6 +172,11 @@ const TeamManagement = () => {
 
   return (
     <div className="p-6 space-y-6">
+      <div className="mb-4">
+        <Link to="/admin">
+          <Button variant="outline">Back to Admin Home</Button>
+        </Link>
+      </div>
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>

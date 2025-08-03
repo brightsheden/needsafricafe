@@ -10,6 +10,7 @@ import heroImage from '@/assets/hero-image.jpg';
 import educationImage from '@/assets/education-program.jpg';
 import healthcareImage from '@/assets/healthcare-program.jpg';
 import environmentImage from '@/assets/environment-program.jpg';
+import { Link } from 'react-router-dom';
 
 const Homepage = () => {
   // Scroll animations for each section
@@ -49,24 +50,7 @@ const Homepage = () => {
     },
   ];
 
-  const testimonials = [
-    {
-      text: "HopeBridge transformed our entire community. My daughter now attends school every day, and our family has access to clean water for the first time.",
-      author: "Maria Santos",
-      location: "Guatemala"
-    },
-    {
-      text: "The healthcare program saved my life. When I couldn't afford treatment, HopeBridge provided the medical care I needed completely free.",
-      author: "James Okonkwo",
-      location: "Nigeria"
-    },
-    {
-      text: "Through the environmental program, we learned sustainable farming. Our crop yields increased by 300% while protecting our land.",
-      author: "Priya Sharma",
-      location: "India"
-    }
-  ];
-
+  
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -89,10 +73,13 @@ const Homepage = () => {
  Join us in bridging the gap with educational and medical equipment for Africa.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="hero" size="xl" className="animate-scale-in">
+                <Link to="/donate">
+                  <Button variant="hero" size="xl" className="animate-scale-in">
                   Join Our Mission
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
+                </Link>
+              
                
               </div>
             </div>
@@ -148,10 +135,12 @@ const Homepage = () => {
               ? 'opacity-100 transform translate-y-0' 
               : 'opacity-0 transform translate-y-8'
           }`} style={{ transitionDelay: '450ms' }}>
-            <Button variant="default" size="lg">
-              View All Programs
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Link to="/projects">
+              <Button variant="default" size="lg">
+                View All Programs
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -231,12 +220,16 @@ const Homepage = () => {
               you're helping us build a better world for everyone.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
-                Donate Today
-              </Button>
-              <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
-                Become a Volunteer
-              </Button>
+              <Link to="/donate">
+                <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
+                  Donate Today
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
+                  Become a Volunteer
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

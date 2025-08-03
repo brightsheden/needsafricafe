@@ -18,6 +18,12 @@ import ProjectManagement from "./pages/admin/ProjectManagement";
 import TeamManagement from "./pages/admin/TeamManagement";
 import NotFound from "./pages/NotFound";
 import Projects from "./pages/Programs";
+import NGOAdminSignup from "./pages/admin/auth/authscreen";
+import AdminLogin from "./pages/admin/auth/Login";
+import CreateProject from "./pages/admin/CreateProject";
+import ProjectEdit from "./pages/admin/ProjectEdit";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminRegister from "./pages/admin/auth/Register";
 
 const queryClient = new QueryClient();
 
@@ -39,9 +45,14 @@ const App = () => (
               <Route path="/donate" element={<Donate />} />
               <Route path="/contact" element={<Contact />} />
               {/* Admin Routes */}
+              <Route path="/admin" element={<AdminHome />} />
               <Route path="/admin/donations" element={<DonationManagement />} />
               <Route path="/admin/projects" element={<ProjectManagement />} />
-              <Route path="/admin/team" element={<TeamManagement />} />
+              <Route path="/admin/projects/create" element={<CreateProject />} />
+              <Route path="/admin/projects/:id/edit" element={<ProjectEdit />} />
+              <Route path="/admin/auth" element={<NGOAdminSignup />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/register" element={<AdminRegister/>} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Logo from '@/assets/logo.png'
 
 const Footer = () => {
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-             <img src='logo.png' className='w-40' />
+             <img src={Logo} className='w-40' />
             </Link>
             <p className="text-white/90 mb-6 leading-relaxed">
               Connecting Donors with Schools and Hospitals in Africa

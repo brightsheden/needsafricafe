@@ -50,7 +50,7 @@ const ProgramCard = ({
           {title}
         </h3>
         <p className="text-muted-foreground mb-4 leading-relaxed">
-          {description}
+          {description?.slice(0,100)}...
         </p>
       
       </CardContent>
