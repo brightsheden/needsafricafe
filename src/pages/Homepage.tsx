@@ -7,9 +7,9 @@ import ProgramCard from '@/components/Shared/ProgramCard';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { ArrowRight, Heart, Users, Globe, CheckCircle } from 'lucide-react';
 import heroImage from '@/assets/hero-image.jpg';
-import educationImage from '@/assets/education-program.jpg';
-import healthcareImage from '@/assets/healthcare-program.jpg';
-import environmentImage from '@/assets/environment-program.jpg';
+import educationImage from '@/assets/class.jpg';
+import healthcareImage from '@/assets/health.jpg';
+import environmentImage from '@/assets/comm.jpg';
 import { Link } from 'react-router-dom';
 
 const Homepage = () => {
