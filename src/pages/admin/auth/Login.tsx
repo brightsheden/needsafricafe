@@ -26,7 +26,7 @@ const AdminLogin: React.FC = () => {
       //   s.user = data;
       //   s.isLoggedIn = true;
       // });
-      navigate('/');
+      navigate('/admin');
     }
   },[isSuccess])
 

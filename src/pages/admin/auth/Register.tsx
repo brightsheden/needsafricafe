@@ -26,7 +26,7 @@ const AdminRegister: React.FC = () => {
       //   s.user = data;
       //   s.isLoggedIn = true;
       // });
-      navigate('/');
+      navigate('/admin/login');
     }
   }, [isSuccess]);
 
