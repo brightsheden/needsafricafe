@@ -24,7 +24,7 @@ const DonationForm = ({ variant = "default", projectId }: DonationFormProps) => 
 
   console.log(projectId, "project id")
 
-  const predefinedAmounts = ['25', '50', '100', '250'];
+  const predefinedAmounts = currency === "NGN" ? ["500", "1500", "3000", "5000"] : ["25", "50", "100", "250"];
 
   const handleCurrencyChange = (value: string) => {
     setCurrency(value);
