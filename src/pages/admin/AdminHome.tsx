@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LayoutDashboard, Users, HandCoins, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { UserStore } from "@/stores/UserStore";
 
 const adminPages = [
   {
@@ -28,22 +27,23 @@ const adminPages = [
 
 const AdminHome = () => {
   const navigate = useNavigate();
-  const user = UserStore.useState(s => s.user);
-  console.log(user)
-  const isLoggedIn = UserStore.useState(s => s.isLoggedIn);
+  // const user = UserStore.useState(s => s.user);
+  // console.log(user)
+  const user = JSON.parse(localStorage.getItem('userInfo') || '{}')
+  // const isLoggedIn = UserStore.useState(s => s.isLoggedIn);
 
   React.useEffect(() => {
-    if (!isLoggedIn || !user) {
+    if (!user) {
       navigate("/admin/login");
     }
-  }, [isLoggedIn, user, navigate]);
+  }, [user, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
-    UserStore.update(s => {
-      s.user = null;
-      s.isLoggedIn = false;
-    });
+    // UserStore.update(s => {
+    //   s.user = null;
+    //   s.isLoggedIn = false;
+    // });
     navigate("/admin/login");
   };
 

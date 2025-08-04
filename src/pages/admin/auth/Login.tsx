@@ -4,7 +4,6 @@ import LoginBg from "@/assets/loginbg.jpg"
 import NeedAfricaLogo from "@/assets/logo.png"
 import { useLogin } from '@/api/auth';
 import { useNavigate } from 'react-router-dom';
-import { UserStore } from "@/stores/UserStore";
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,10 +22,10 @@ const AdminLogin: React.FC = () => {
   useEffect(()=>{
     if(isSuccess){
       localStorage.setItem('userInfo', JSON.stringify(data));
-      UserStore.update(s => {
-        s.user = data;
-        s.isLoggedIn = true;
-      });
+      // UserStore.update(s => {
+      //   s.user = data;
+      //   s.isLoggedIn = true;
+      // });
       navigate('/');
     }
   },[isSuccess])
