@@ -93,7 +93,7 @@ const Homepage = () => {
       </section>
 
       {/* Impact Numbers */}
-      <ImpactCounter stats={impactStats} />
+      {/* <ImpactCounter stats={impactStats} /> */}
 
       {/* Programs Preview */}
       <section ref={programsSection.ref} className="py-20 bg-background">
