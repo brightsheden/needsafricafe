@@ -25,7 +25,7 @@ const Projects = () => {
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
-  const categories = ['All', 'Education', 'Healthcare', 'Environment', 'Community Development'];
+  const categories = ['All', 'Education', 'Healthcare',  'Community Development'];
 
   const { data, isLoading, isError } = useProjects({
     search: searchTerm,
@@ -60,7 +60,7 @@ const Projects = () => {
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold font-heading mb-6">
               Comprehensive Solutions for
-              <span className="block text-primary">Lasting Change</span>
+              <span className="block text-primary">Educational and Health Change</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Explore our diverse portfolio of projects designed to address the root causes of poverty 
@@ -75,6 +75,9 @@ const Projects = () => {
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
         </div>
       ) : null}
+
+    
+    
 
       {/* Project Statistics */}
       <section className="py-16 bg-background">

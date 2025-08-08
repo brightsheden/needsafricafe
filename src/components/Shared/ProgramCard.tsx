@@ -21,7 +21,7 @@ const ProgramCard = ({
   image, 
   category, 
   impact, 
-  href = "#",
+  href = "",
   variant = 'default' 
 }: ProgramCardProps) => {
   const cardClass = variant === 'featured' 
@@ -61,10 +61,11 @@ const ProgramCard = ({
           className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all"
           asChild
         >
-          <Link to={href} className="flex items-center justify-center space-x-2">
+          {href && ( <Link to={href} className="flex items-center justify-center space-x-2">
             <span>Learn More</span>
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </Link>)}
+         
         </Button>
       </CardFooter>
     </Card>

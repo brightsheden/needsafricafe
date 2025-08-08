@@ -24,7 +24,7 @@ const Mission = () => {
               <span className="block text-primary">Transforming Lives</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            To improve education and healthcare in Africa by redirecting underutilized resources developed countries to communities that need them most.
+            To improve education and healthcare in Africa by redirecting underutilized resources in developed countries to communities that need them most.
             </p>
           </div>
         </div>
