@@ -25,6 +25,7 @@ import { API_URL } from "../../../config";
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import AdminLayout from "./AdminLayout";
 
 
 const ProjectManagement = () => {
@@ -166,7 +167,9 @@ const ProjectManagement = () => {
    
 
   return (
-    <div className="p-6 space-y-6">
+    <AdminLayout>
+
+         <div className="p-6 space-y-6">
       <div className="mb-4">
         <Link to="/admin">
           <Button variant="outline">Back to Admin Home</Button>
@@ -407,6 +410,8 @@ const ProjectManagement = () => {
         onCancel={() => { setDeleteDialogOpen(false); setProjectToDelete(null); }}
       />
     </div>
+    </AdminLayout>
+ 
   );
 };
 

@@ -19,12 +19,12 @@ const Header = () => {
   const isActive = (href: string) => location.pathname === href;
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <div className="container mx-auto max-w-7xl px-6">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border p-6">
+      <div className="container mx-auto max-w-7xl px-10">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center  space-x-2">
-            <img src={Logo} className='w-40' />
+            <img src={Logo}  className="w-60 h-auto object-contain" />
         
           </Link>
 
@@ -48,7 +48,7 @@ const Header = () => {
           {/* CTA Buttons */}
         
           <div className="hidden md:flex items-center space-x-4">
-              <Link to={'/contact'}>
+              <Link to={'/vulunteer'}>
                <Button variant="outline" size="sm">
               Volunteer
             </Button>
@@ -92,12 +92,19 @@ const Header = () => {
                 </Link>
               ))}
               <div className="pt-4 flex flex-col space-y-2">
-                <Button variant="outline" size="sm">
+                <Link to={'/vulunteer'}>
+                 <Button variant="outline" size="sm">
                   Volunteer
-                </Button>
-                <Button variant="donate" size="sm">
+                </Button> 
+                </Link>
+              
+              <Link to={'/donate'}>
+               <Button variant="donate" size="sm">
                   Donate Now
                 </Button>
+              
+              </Link>
+               
               </div>
             </div>
           </div>

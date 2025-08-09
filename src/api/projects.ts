@@ -119,20 +119,35 @@ export const useAddProjectPhotos = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ projectId, photos }: { projectId: number; photos: File[] }) => {
+    mutationFn: ({
+      projectId,
+      photos,
+      payload,
+    }: {
+      projectId: number;
+      photos: File[];
+      payload: Record<string, any>;
+    }) => {
       const formData = new FormData();
-      photos.forEach((photo, i) => {
-        formData.append(`photo_${i}`, photo);
+
+      // Append each image file
+      photos.forEach((photo) => {
+        formData.append("image", photo); // must match backend's expected key
       });
+
+      // Append payload as JSON string
+      formData.append("payload", JSON.stringify(payload));
 
       return api
         .post(`/api/project/${projectId}/photos`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { "Content-Type": "multipart/form-data" },
         })
-        .then(res => res.data);
+        .then((res) => res.data);
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['project', variables.projectId] });
+      queryClient.invalidateQueries({
+        queryKey: ["project", variables.projectId],
+      });
     },
   });
 };

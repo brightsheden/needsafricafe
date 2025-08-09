@@ -24,6 +24,9 @@ import CreateProject from "./pages/admin/CreateProject";
 import ProjectEdit from "./pages/admin/ProjectEdit";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminRegister from "./pages/admin/auth/Register";
+import ThankYou from "./pages/ThankYou";
+import Volunteer from "./pages/Vulunteer";
+import ProjectProofPage from "./pages/proofs";
 
 const queryClient = new QueryClient();
 
@@ -53,7 +56,10 @@ const App = () => (
               <Route path="/admin/auth" element={<NGOAdminSignup />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/register" element={<AdminRegister/>} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="/thankyou" element={<ThankYou />} />
+              <Route path="/vulunteer" element={<Volunteer/>}/>
+              <Route path="/projects/proof/:projectId" element={<ProjectProofPage/>} />
+               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

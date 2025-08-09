@@ -19,12 +19,6 @@ const Homepage = () => {
   const newsletterSection = useScrollAnimation();
   const ctaSection = useScrollAnimation();
 
-  const impactStats = [
-    { number: 15000, label: 'Lives Transformed', suffix: '+' },
-    { number: 127, label: 'Projects Completed' },
-    { number: 45, label: 'Communities Served' },
-    { number: 8, label: 'Years of Impact' },
-  ];
 
   const featuredPrograms = [
     {
@@ -66,7 +60,7 @@ const Homepage = () => {
             <div className="text-white space-y-8 animate-fade-in-up">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight">
                 NeedsAfrica
-                {/* <span className="block text-primary">One Act at a Time</span> */}
+               
               </h1>
               <p className="text-xl md:text-2xl leading-relaxed text-white/90">
                 Connecting Donors with Schools and Hospitals in Africa

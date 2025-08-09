@@ -10,6 +10,7 @@ import { Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { useDonations } from '@/api/donation';
 import { Link } from 'react-router-dom';
+import AdminLayout from "./AdminLayout";
 
 const DonationManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,7 +71,8 @@ const DonationManagement = () => {
   if (isError) return <div className="p-6 text-red-600">Failed to load donations.</div>;
 
   return (
-    <div className="p-6 space-y-6">
+    <AdminLayout>
+         <div className="p-6 space-y-6">
       <div className="mb-4">
         <Link to="/admin">
           <Button variant="outline">Back to Admin Home</Button>
@@ -205,6 +207,9 @@ const DonationManagement = () => {
         </CardContent>
       </Card>
     </div>
+
+    </AdminLayout>
+ 
   );
 };
 

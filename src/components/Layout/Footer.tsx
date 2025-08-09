@@ -13,7 +13,7 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-             <img src={Logo} className='w-40' />
+             <img src={Logo} className='w-full h-full' />
             </Link>
             <p className="text-white/90 mb-6 leading-relaxed">
               Connecting Donors with Schools and Hospitals in Africa

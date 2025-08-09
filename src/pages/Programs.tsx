@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import ProgramCard from '@/components/Shared/ProgramCard'; // Will rename below
+import ProgramCard from '@/components/Shared/ProgramCard';
 import { 
   Search, 
   Filter, 
@@ -11,36 +11,34 @@ import {
   Heart, 
   Leaf, 
   Users,
-  MapPin,
-  Calendar,
-  Target,
-  DollarSign
+  Target
 } from 'lucide-react';
-
 import { useProjects } from '@/api/projects';
-import { API_URL } from "../../config"
+import { API_URL } from "../../config";
+
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('active'); // New: 'active' or 'completed'
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
-  const categories = ['All', 'Education', 'Healthcare',  'Community Development'];
+  const categories = ['All', 'Education', 'Healthcare', 'Community Development'];
 
   const { data, isLoading, isError } = useProjects({
     search: searchTerm,
     category: activeFilter !== 'All' ? activeFilter.toLowerCase() : '',
+    status: statusFilter, // Pass new filter
     page,
     page_size: pageSize
   });
+
   const projects = data?.data || [];
   const total = data?.total || 0;
   const totalPages = data?.total_pages || 1;
 
-  // Remove client-side filtering
-
   const categoryStats = categories.slice(1).map(category => {
-    const categoryProjects = projects.filter(p => p.category === category.toLocaleLowerCase());
+    const categoryProjects = projects.filter(p => p.category === category.toLowerCase());
     return {
       name: category,
       count: categoryProjects.length,
@@ -70,14 +68,11 @@ const Projects = () => {
         </div>
       </section>
 
-      {isLoading ? (
+      {isLoading && (
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
         </div>
-      ) : null}
-
-    
-    
+      )}
 
       {/* Project Statistics */}
       <section className="py-16 bg-background">
@@ -104,11 +99,27 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* Search and Filter */}
+      {/* Search, Filter & Status Tabs */}
       <section className="py-8 bg-muted/30">
-        <div className="container mx-auto max-w-7xl px-6">
+        <div className="container mx-auto max-w-7xl px-6 space-y-4">
+          {/* Status Tabs */}
+          <div className="flex justify-center gap-4">
+            <Button
+              variant={statusFilter === 'active' ? "default" : "outline"}
+              onClick={() => { setStatusFilter('active'); setPage(1); }}
+            >
+              Active Projects
+            </Button>
+            <Button
+              variant={statusFilter === 'completed' ? "default" : "outline"}
+              onClick={() => { setStatusFilter('completed'); setPage(1); }}
+            >
+              Completed Projects
+            </Button>
+          </div>
+
+          {/* Search & Category Filter */}
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            {/* Search */}
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -119,8 +130,6 @@ const Projects = () => {
                 className="pl-10"
               />
             </div>
-
-            {/* Category Filter */}
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <Button
@@ -128,7 +137,6 @@ const Projects = () => {
                   variant={activeFilter === category ? "default" : "outline"}
                   size="sm"
                   onClick={() => { setActiveFilter(category); setPage(1); }}
-                  className="transition-all"
                 >
                   {category}
                 </Button>
@@ -136,10 +144,11 @@ const Projects = () => {
             </div>
           </div>
 
-          <div className="mt-4 text-center">
+          <div className="text-center">
             <p className="text-muted-foreground">
               Showing {projects.length} of {total} projects
               {activeFilter !== 'All' && ` in ${activeFilter}`}
+              {statusFilter && ` (${statusFilter})`}
             </p>
           </div>
         </div>
@@ -171,7 +180,8 @@ const Projects = () => {
               ))}
             </div>
           )}
-          {/* Pagination Controls */}
+          
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center mt-8 gap-2">
               <Button
@@ -196,7 +206,6 @@ const Projects = () => {
         </div>
       </section>
 
-    
       {/* Call to Action */}
       <section className="py-20 bg-gradient-impact text-white">
         <div className="container mx-auto max-w-7xl px-6 text-center">
@@ -220,7 +229,6 @@ const Projects = () => {
       </section>
     </div>
   );
-
 };
 
 export default Projects;

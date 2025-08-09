@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,13 +12,8 @@ import {
   Calendar,
   Target,
   DollarSign,
-  Users,
-  CheckCircle,
   Share2,
-  Heart,
-  Download
 } from 'lucide-react';
-
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
 
@@ -27,6 +22,12 @@ const ProgramDetails = () => {
   const projectId = Number(id);
   const { data, isLoading, isError } = useProject(projectId);
   const program = data?.data;
+
+  const photos = program?.photos?.filter((p) => p.image) || [];
+  const [mainImage, setMainImage] = useState(photos[0]?.image || null);
+  const [mainName, setMainName] = useState(photos[0]?.name || '');
+  const [mainDate, setMainDate] = useState(photos[0]?.deliver_date || '');
+  const [animateMainImage, setAnimateMainImage] = useState(false);
 
   if (!program) {
     return (
@@ -59,12 +60,18 @@ const ProgramDetails = () => {
 
         <div className="relative z-10 container mx-auto max-w-7xl px-6 h-full flex items-center">
           <div className="text-white max-w-4xl">
-            <Link to="/projects" className="inline-flex items-center text-white/80 hover:text-white mb-4 transition-colors">
+            <Link
+              to="/projects"
+              className="inline-flex items-center text-white/80 hover:text-white mb-4 transition-colors"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Programs
             </Link>
 
-            <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30">
+            <Badge
+              variant="secondary"
+              className="mb-4 bg-white/20 text-white border-white/30"
+            >
               {program?.category}
             </Badge>
 
@@ -98,29 +105,81 @@ const ProgramDetails = () => {
             <div className="lg:col-span-2 space-y-12">
               {/* Overview */}
               <div>
-                <h2 className="text-3xl font-bold font-heading mb-6">Program Overview</h2>
+                <h2 className="text-3xl font-bold font-heading mb-6">
+                  Program Overview
+                </h2>
                 <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                   {program.summary}
                 </p>
 
                 {/* Key Metrics */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                  <Card className="text-center">
-                    <CardContent className="p-6">
-                      <DollarSign className="h-8 w-8 mx-auto text-primary mb-2" />
-                      <div className="text-2xl font-bold text-primary mb-1">{program.currency} {program.target_amount}</div>
-                      <div className="text-sm text-muted-foreground">Total Budget</div>
-                    </CardContent>
-                  </Card>
-                </div>
+            
               </div>
+
+              {/* Proof of Delivery Section */}
+              {photos.length > 0 && (
+                <div>
+                  <h2 className="text-3xl font-bold font-heading mb-6">
+                    Proof of Delivery
+                  </h2>
+                  <div className="space-y-4">
+                    {/* Main Image */}
+                  {mainImage && (
+  <img
+    src={`${API_URL}${mainImage}`}
+    alt="Proof of Delivery"
+     className={`w-[800px] h-[500px] mx-auto rounded-lg object-cover transition-transform duration-300 ${
+      animateMainImage ? 'scale-105 opacity-0' : 'scale-100 opacity-100'
+    }`}
+  />
+)}
+                    {/* Recipient Info */}
+                    <div className="text-center mt-2">
+                      <p className="text-lg font-semibold">
+                        Recipient: {mainName}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Date of Delivery:{' '}
+                        {mainDate
+                          ? new Date(mainDate).toLocaleDateString()
+                          : 'N/A'}
+                      </p>
+                    </div>
+
+                    {/* Thumbnails */}
+                    <div className="flex gap-2 overflow-x-auto pt-2">
+                      {photos.map((photo, idx) => (
+                        <img
+                          key={idx}
+                          src={`${API_URL}${photo.image}`}
+                          alt={`Thumbnail ${idx + 1}`}
+                          className={`h-20 w-20 object-cover rounded-lg cursor-pointer border-2 transition ${
+                            mainImage === photo.image
+                              ? 'border-primary'
+                              : 'border-transparent'
+                          }`}
+                     onClick={() => {
+  setAnimateMainImage(true);
+  setMainImage(photo.image);
+  setMainName(photo.name);
+  setMainDate(photo.deliver_date);
+  setTimeout(() => setAnimateMainImage(false), 300); // match animation duration
+}}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Share Section */}
               <div className="pt-8 border-t">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-semibold mb-2">Share This Program</h4>
-                    <p className="text-sm text-muted-foreground">Help us spread awareness about this important work</p>
+                    <p className="text-sm text-muted-foreground">
+                      Help us spread awareness about this important work
+                    </p>
                   </div>
                   <Button variant="outline" size="sm">
                     <Share2 className="h-4 w-4 mr-2" />
@@ -137,7 +196,11 @@ const ProgramDetails = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     Funding Progress
-                    <Badge variant={program.status === 'Active' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        program.status === 'Active' ? 'default' : 'secondary'
+                      }
+                    >
                       {program.status}
                     </Badge>
                   </CardTitle>
@@ -145,35 +208,31 @@ const ProgramDetails = () => {
                 <CardContent className="space-y-6">
                   <div>
                     <div className="flex justify-between text-sm mb-2">
-                      <span>Raised: {program.currency} {program.amount_raised}</span>
+                      <span>
+                        Raised: {program.currency} {program.amount_raised}
+                      </span>
                       <span>{program.percentage_funded.toFixed(2)}%</span>
                     </div>
-                    <Progress value={program.percentage_funded} className="h-3" />
+                    <Progress
+                      value={program.percentage_funded}
+                      className="h-3"
+                    />
                     <div className="text-sm text-muted-foreground mt-2">
                       Goal: {program.currency} {program.target_amount}
                     </div>
                   </div>
-
                   <Separator />
-
-                  {/* <div className="space-y-3">
-                    <h4 className="font-semibold">Quick Actions</h4>
-                    <div className="space-y-2">
-                      <Button variant="default" className="w-full">
-                        <Heart className="h-4 w-4 mr-2" />
-                        Support This Program
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Report
-                      </Button>
-                    </div>
-                  </div> */}
+                  {program.donation_reason && (<div>
+                    <CardTitle> Donation Reason</CardTitle>
+                  
+                    <span className='text-sm'>{program.donation_reason}</span>
+                  </div>)}
+                  
                 </CardContent>
               </Card>
 
               {/* Donation Form */}
-              <Card>
+              {program.receiving_donation && (       <Card>
                 <CardHeader>
                   <CardTitle>Support This Program</CardTitle>
                 </CardHeader>
@@ -181,7 +240,8 @@ const ProgramDetails = () => {
                   <DonationForm projectId={projectId} />
                 </CardContent>
               </Card>
-
+)}
+       
               {/* Program Info */}
               <Card>
                 <CardHeader>
@@ -192,7 +252,9 @@ const ProgramDetails = () => {
                     <MapPin className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <div className="font-medium">Location</div>
-                      <div className="text-sm text-muted-foreground">{program.location}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {program.location}
+                      </div>
                     </div>
                   </div>
 
@@ -200,7 +262,9 @@ const ProgramDetails = () => {
                     <Calendar className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <div className="font-medium">End Date</div>
-                      <div className="text-sm text-muted-foreground">{program.deadline}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {program.deadline}
+                      </div>
                     </div>
                   </div>
 
@@ -208,7 +272,9 @@ const ProgramDetails = () => {
                     <Target className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <div className="font-medium">Category</div>
-                      <div className="text-sm text-muted-foreground">{program.category}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {program.category}
+                      </div>
                     </div>
                   </div>
                 </CardContent>

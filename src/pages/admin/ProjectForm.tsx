@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ProjectFormProps {
   initialValues?: any;
@@ -27,6 +28,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     endDate: initialValues?.deadline || '',
     status: initialValues?.status || 'Draft',
     currency: initialValues?.currency || '',
+    receiving_donation: initialValues.receiving_donation || false,
+    donation_reason:initialValues.donation_reason || ""
   });
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
@@ -218,20 +221,17 @@ useEffect(() => {
             <img src={coverPhotoPreview} alt="Cover Preview" className="mt-2 w-32 h-32 object-cover rounded" />
           )}
         </div>
-        <div>
-          <Label>Media Files</Label>
-          <Input
-            type="file"
-            multiple
-            onChange={handleMediaFilesChange}
-          />
-          <div className="flex gap-2 mt-2 flex-wrap">
-            {mediaFilesPreview.map((src, idx) => (
-              <img key={idx} src={src} alt={`Media Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded" />
-            ))}
+{Array.isArray(initialValues.photos) && initialValues.photos.length > 0 && (   <div>
+          <Label>Donation Reason</Label>
+          <Input type='text' value={projectForm.donation_reason} onChange={e => setProjectForm({...projectForm, donation_reason:e.target.value } )} placeholder='reason for donation continuation'/>
+        </div>)}
+     
+       
+        <div className="flex justify-between">
+          <div className='flex gap-2'>
+             <Label>Donation Contnue</Label>
+            <Checkbox       onCheckedChange={e => setProjectForm({ ...projectForm, receiving_donation: !projectForm.receiving_donation })}  checked={projectForm.receiving_donation} value={projectForm.receiving_donation}/>
           </div>
-        </div>
-        <div className="flex justify-end">
           <Button type="submit" disabled={isPending}>
             {isPending ? 'Saving...' : submitLabel || 'Save'}
           </Button>

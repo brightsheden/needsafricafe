@@ -22,6 +22,7 @@ import {
   Upload
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AdminLayout from "./AdminLayout";
 
 const TeamManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -171,261 +172,263 @@ const TeamManagement = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="mb-4">
-        <Link to="/admin">
-          <Button variant="outline">Back to Admin Home</Button>
-        </Link>
-      </div>
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold font-serif">Team Management</h1>
-          <p className="text-muted-foreground">Manage team members and permissions</p>
+    <AdminLayout>
+      <div className="p-6 space-y-6">
+        <div className="mb-4">
+          <Link to="/admin">
+            <Button variant="outline">Back to Admin Home</Button>
+          </Link>
         </div>
-        <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Invite Member
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                {editingMember ? 'Edit Team Member' : 'Invite New Team Member'}
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleInviteMember} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Full Name</Label>
-                  <Input
-                    value={memberForm.name}
-                    onChange={(e) => setMemberForm({...memberForm, name: e.target.value})}
-                    placeholder="Enter full name"
-                    required
-                  />
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold font-serif">Team Management</h1>
+            <p className="text-muted-foreground">Manage team members and permissions</p>
+          </div>
+          <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
+            <DialogTrigger asChild>
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Invite Member
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingMember ? 'Edit Team Member' : 'Invite New Team Member'}
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleInviteMember} className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Full Name</Label>
+                    <Input
+                      value={memberForm.name}
+                      onChange={(e) => setMemberForm({...memberForm, name: e.target.value})}
+                      placeholder="Enter full name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Email Address</Label>
+                    <Input
+                      type="email"
+                      value={memberForm.email}
+                      onChange={(e) => setMemberForm({...memberForm, email: e.target.value})}
+                      placeholder="email@example.com"
+                      required
+                    />
+                  </div>
                 </div>
+
                 <div>
-                  <Label>Email Address</Label>
-                  <Input
-                    type="email"
-                    value={memberForm.email}
-                    onChange={(e) => setMemberForm({...memberForm, email: e.target.value})}
-                    placeholder="email@example.com"
-                    required
-                  />
+                  <Label>Role</Label>
+                  <Select value={memberForm.role} onValueChange={(value) => setMemberForm({...memberForm, role: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Admin">Admin</SelectItem>
+                      <SelectItem value="Project Manager">Project Manager</SelectItem>
+                      <SelectItem value="Volunteer Coordinator">Volunteer Coordinator</SelectItem>
+                      <SelectItem value="Community Outreach Lead">Community Outreach Lead</SelectItem>
+                      <SelectItem value="Finance Manager">Finance Manager</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
 
-              <div>
-                <Label>Role</Label>
-                <Select value={memberForm.role} onValueChange={(value) => setMemberForm({...memberForm, role: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Admin">Admin</SelectItem>
-                    <SelectItem value="Project Manager">Project Manager</SelectItem>
-                    <SelectItem value="Volunteer Coordinator">Volunteer Coordinator</SelectItem>
-                    <SelectItem value="Community Outreach Lead">Community Outreach Lead</SelectItem>
-                    <SelectItem value="Finance Manager">Finance Manager</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                <div>
+                  <Label>Profile Photo</Label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <Avatar className="h-16 w-16">
+                      <AvatarImage src="/team-photo.jpg" />
+                      <AvatarFallback>{memberForm.name ? getInitials(memberForm.name) : 'NA'}</AvatarFallback>
+                    </Avatar>
+                    <Button type="button" variant="outline" className="gap-2">
+                      <Upload className="h-4 w-4" />
+                      Upload Photo
+                    </Button>
+                  </div>
+                </div>
 
-              <div>
-                <Label>Profile Photo</Label>
-                <div className="flex items-center gap-4 mt-2">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src="/team-photo.jpg" />
-                    <AvatarFallback>{memberForm.name ? getInitials(memberForm.name) : 'NA'}</AvatarFallback>
-                  </Avatar>
-                  <Button type="button" variant="outline" className="gap-2">
-                    <Upload className="h-4 w-4" />
-                    Upload Photo
+                <div>
+                  <Label>Permissions</Label>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    {availablePermissions.map((permission) => (
+                      <div key={permission.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={permission.id}
+                          checked={memberForm.permissions.includes(permission.id)}
+                          onCheckedChange={(checked) => handlePermissionChange(permission.id, !!checked)}
+                        />
+                        <Label htmlFor={permission.id} className="text-sm">
+                          {permission.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-2 justify-end">
+                  <Button type="button" variant="outline" onClick={() => {
+                    setShowInviteModal(false);
+                    setEditingMember(null);
+                  }}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    {editingMember ? 'Update Member' : 'Send Invitation'}
                   </Button>
                 </div>
-              </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
 
-              <div>
-                <Label>Permissions</Label>
-                <div className="grid grid-cols-2 gap-3 mt-3">
-                  {availablePermissions.map((permission) => (
-                    <div key={permission.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={permission.id}
-                        checked={memberForm.permissions.includes(permission.id)}
-                        onCheckedChange={(checked) => handlePermissionChange(permission.id, !!checked)}
-                      />
-                      <Label htmlFor={permission.id} className="text-sm">
-                        {permission.label}
-                      </Label>
-                    </div>
-                  ))}
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <Users className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Members</p>
+                  <p className="text-2xl font-bold">{totalMembers}</p>
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => {
-                  setShowInviteModal(false);
-                  setEditingMember(null);
-                }}>
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingMember ? 'Update Member' : 'Send Invitation'}
-                </Button>
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-secondary/10 p-3 rounded-full">
+                  <UserCheck className="h-6 w-6 text-secondary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Active Members</p>
+                  <p className="text-2xl font-bold">{activeMembers}</p>
+                </div>
               </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+            </CardContent>
+          </Card>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-accent/10 p-3 rounded-full">
+                  <UserX className="h-6 w-6 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Inactive Members</p>
+                  <p className="text-2xl font-bold">{inactiveMembers}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Filters */}
         <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <Users className="h-6 w-6 text-primary" />
+          <CardHeader>
+            <CardTitle>Team Members</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-4 mb-6">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search team members..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Members</p>
-                <p className="text-2xl font-bold">{totalMembers}</p>
-              </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-secondary/10 p-3 rounded-full">
-                <UserCheck className="h-6 w-6 text-secondary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Active Members</p>
-                <p className="text-2xl font-bold">{activeMembers}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-accent/10 p-3 rounded-full">
-                <UserX className="h-6 w-6 text-accent" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Inactive Members</p>
-                <p className="text-2xl font-bold">{inactiveMembers}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Team Members</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search team members..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Team Members Table */}
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Member</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Join Date</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredMembers.map((member) => (
-                <TableRow key={member.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarImage src={member.avatar} />
-                        <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">{member.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {member.permissions.length} permissions
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      {getRoleIcon(member.role)}
-                      {member.role}
-                    </div>
-                  </TableCell>
-                  <TableCell>{member.email}</TableCell>
-                  <TableCell>{getStatusBadge(member.status)}</TableCell>
-                  <TableCell>{new Date(member.joinDate).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => handleEditMember(member)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={`mailto:${member.email}`}>
-                          <Mail className="h-4 w-4" />
-                        </a>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <UserX className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+            {/* Team Members Table */}
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Member</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Join Date</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+              </TableHeader>
+              <TableBody>
+                {filteredMembers.map((member) => (
+                  <TableRow key={member.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarImage src={member.avatar} />
+                          <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium">{member.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {member.permissions.length} permissions
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        {getRoleIcon(member.role)}
+                        {member.role}
+                      </div>
+                    </TableCell>
+                    <TableCell>{member.email}</TableCell>
+                    <TableCell>{getStatusBadge(member.status)}</TableCell>
+                    <TableCell>{new Date(member.joinDate).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleEditMember(member)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm" asChild>
+                          <a href={`mailto:${member.email}`}>
+                            <Mail className="h-4 w-4" />
+                          </a>
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <UserX className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    </AdminLayout>
   );
 };
 

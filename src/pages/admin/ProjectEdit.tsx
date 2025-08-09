@@ -1,9 +1,10 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useProject, useUpdateProject } from '@/api/projects';
 import ProjectForm from './ProjectForm';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -26,7 +27,10 @@ const ProjectEdit = () => {
           currency: formData.projectForm.currency || 'NGN',
           deadline: formData.projectForm.endDate || null,
           status: formData.projectForm.status || 'draft',
+          receiving_donation:  formData.projectForm.receiving_donation || false ,
+          donation_reason: formData.projectForm.donation_reason || ""
         },
+
         cover_photo: formData.coverPhoto || null,
         media_files: formData.mediaFiles || [],
       });
@@ -55,8 +59,12 @@ const ProjectEdit = () => {
   return (
     <div className="p-6 mx-auto">
       <Card>
-        <CardHeader>
+        <CardHeader className='flex justify-between'>
           <CardTitle>Edit Project</CardTitle>
+          
+          <Link className='' to={`/projects/proof/${id}`}>
+          <Button>Upload Proof Of Delivery</Button>
+          </Link>
         </CardHeader>
         <ProjectForm
           initialValues={project?.data}
