@@ -27,6 +27,8 @@ import AdminRegister from "./pages/admin/auth/Register";
 import ThankYou from "./pages/ThankYou";
 import Volunteer from "./pages/Vulunteer";
 import ProjectProofPage from "./pages/proofs";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,8 @@ const App = () => (
               <Route path="/projects/:id" element={<ProgramDetails />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/terms" element={<TermsOfService/>}/>
+              <Route path="/privacy" element={<PrivacyPolicy/>}/>
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminHome />} />
               <Route path="/admin/donations" element={<DonationManagement />} />
@@ -59,7 +63,7 @@ const App = () => (
               <Route path="/thankyou" element={<ThankYou />} />
               <Route path="/vulunteer" element={<Volunteer/>}/>
               <Route path="/projects/proof/:projectId" element={<ProjectProofPage/>} />
-               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+               
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

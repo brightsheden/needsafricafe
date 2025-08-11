@@ -1,9 +1,24 @@
 import { Check, Home, Folder, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BgIMage from "../assets/freepik.jpg"
+import { useExecutePaypalPayment } from "../api/donation";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const ThankYou = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { mutate: executePaypalPayment, isPending, isSuccess, data, error } = useExecutePaypalPayment();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const payer_id = searchParams.get("PayerID") || "";
+    const payment_id = searchParams.get("paymentId") || "";
+    const token = searchParams.get("token") || "";
+    if (token) {
+      executePaypalPayment({ payer_id, payment_id, token });
+    }
+  }, [location.search, executePaypalPayment]);
 
   const handleShare = () => {
     const shareData = {

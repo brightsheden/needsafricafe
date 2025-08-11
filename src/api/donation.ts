@@ -50,3 +50,23 @@ export const useDonate = () => {
     },
   });
 };
+
+
+export const useExecutePaypalPayment = () => {
+  return useMutation({
+    mutationFn: async ({
+      payer_id,
+      payment_id,
+      token,
+    }: {
+      payer_id: string;
+      payment_id: string;
+      token: string;
+    }) => {
+      const response = await api.get('/api/donation/execute_paypal/payment', {
+        params: { payer_id, payment_id, token },
+      });
+      return response.data;
+    },
+  });
+};
