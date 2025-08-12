@@ -14,7 +14,7 @@ type DonationFormProps = {
 const DonationForm = ({ variant = "default", projectId }: DonationFormProps) => {
   const [amount, setAmount] = useState('');
   const [currency,setCurrency] = useState("USD")
-  const [paymentClient, setPaymentClient] = useState("PAYSTACK")
+  const [paymentClient, setPaymentClient] = useState("PAYPAL")
   const [frequency, setFrequency] = useState('ONCE');
   const {mutate:donate, isLoading, isPending, isSuccess, isError,error, data} = useDonate()
   const [formData, setFormData] = useState({
