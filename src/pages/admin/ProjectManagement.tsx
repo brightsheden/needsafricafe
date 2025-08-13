@@ -176,9 +176,9 @@ const ProjectManagement = () => {
         </Link>
       </div>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between ">
         <div>
-          <h1 className="text-3xl font-bold font-serif">Project Management</h1>
+          <h1 className="text-1xl md:text-3xl font-bold font-serif">Project Management</h1>
           <p className="text-muted-foreground">Create and manage all NGO projects</p>
         </div>
         <Link to={"/admin/projects/create"}>

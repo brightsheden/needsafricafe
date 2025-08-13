@@ -28,7 +28,11 @@ const ProjectEdit = () => {
           deadline: formData.projectForm.endDate || null,
           status: formData.projectForm.status || 'draft',
           receiving_donation:  formData.projectForm.receiving_donation || false ,
-          donation_reason: formData.projectForm.donation_reason || ""
+          donation_reason: formData.projectForm.donation_reason || "",
+           // Impact fields
+          impact_phrase: formData.projectForm.impact_phrase || '',
+          beneficiary_count: formData.projectForm.beneficiary_count ?? 0,
+          impact_count: formData.projectForm.impact_count ?? 0
         },
 
         cover_photo: formData.coverPhoto || null,

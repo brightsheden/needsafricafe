@@ -18,12 +18,12 @@ const adminPages = [
     path: "/admin/donations",
     icon: <HandCoins className="h-8 w-8 text-primary" />
   },
-  {
-    label: "Team Management",
-    description: "Manage team members and permissions.",
-    path: "/admin/team",
-    icon: <Users className="h-8 w-8 text-primary" />
-  }
+  // {
+  //   label: "Team Management",
+  //   description: "Manage team members and permissions.",
+  //   path: "/admin/team",
+  //   icon: <Users className="h-8 w-8 text-primary" />
+  // }
 ];
 
 const AdminHome = () => {

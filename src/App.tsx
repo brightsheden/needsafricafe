@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, useLocation, Routes, Route } from "react-router-dom";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import Homepage from "./pages/Homepage";
@@ -32,46 +32,53 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  return (
+    <div className="min-h-screen flex flex-col">
+      {!isAdminRoute && <Header />}
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/mission" element={<Mission />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProgramDetails />} />
+          <Route path="/donate" element={<Donate />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<TermsOfService/>}/>
+          <Route path="/privacy" element={<PrivacyPolicy/>}/>
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/donations" element={<DonationManagement />} />
+          <Route path="/admin/projects" element={<ProjectManagement />} />
+          <Route path="/admin/projects/create" element={<CreateProject />} />
+          <Route path="/admin/projects/:id/edit" element={<ProjectEdit />} />
+          <Route path="/admin/auth" element={<NGOAdminSignup />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/register" element={<AdminRegister/>} />
+          <Route path="/thankyou" element={<ThankYou />} />
+          <Route path="/vulunteer" element={<Volunteer/>}/>
+          <Route path="/projects/proof/:projectId" element={<ProjectProofPage/>} />
+           
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      {!isAdminRoute && <Footer />}
+    </div>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/mission" element={<Mission />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/:id" element={<ProgramDetails />} />
-              <Route path="/donate" element={<Donate />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/terms" element={<TermsOfService/>}/>
-              <Route path="/privacy" element={<PrivacyPolicy/>}/>
-              {/* Admin Routes */}
-              <Route path="/admin" element={<AdminHome />} />
-              <Route path="/admin/donations" element={<DonationManagement />} />
-              <Route path="/admin/projects" element={<ProjectManagement />} />
-              <Route path="/admin/projects/create" element={<CreateProject />} />
-              <Route path="/admin/projects/:id/edit" element={<ProjectEdit />} />
-              <Route path="/admin/auth" element={<NGOAdminSignup />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin/register" element={<AdminRegister/>} />
-              <Route path="/thankyou" element={<ThankYou />} />
-              <Route path="/vulunteer" element={<Volunteer/>}/>
-              <Route path="/projects/proof/:projectId" element={<ProjectProofPage/>} />
-               
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
-
 export default App;

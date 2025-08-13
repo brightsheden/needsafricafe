@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "./AdminNavbar";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
@@ -12,7 +13,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   }, [user, navigate]);
 
   return (
-    <>{children}</>
+    <>
+      <AdminNavbar />
+      {children}
+    </>
   );
 };
 

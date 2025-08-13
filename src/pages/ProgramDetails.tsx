@@ -13,6 +13,8 @@ import {
   Target,
   DollarSign,
   Share2,
+  User,
+  Users,
 } from 'lucide-react';
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
@@ -113,6 +115,42 @@ const ProgramDetails = () => {
                 </p>
 
                 {/* Key Metrics */}
+
+                <div className=''>
+                  <h2 className="text-3xl font-bold font-heading mb-6">
+                  Key Metrics
+                </h2>
+                <div  className='flex flex-col md:flex-row justify-between gap-4'>
+                            <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
+                    <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
+                    <Target className='size-8'/>
+                   {program?.impact_count} {program?.impact_phrase}
+                  </p>
+                  <span className='text-muted-foreground'>Direct impact </span>
+                  </div>
+
+                   <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
+                    <p className="text-2xl font-bold text-primary leading-relaxed  flex justify-between flex-col items-center">
+                    <DollarSign className='size-8'/>
+                   {program.impact_count} {program?.total_amount}
+                  </p>
+                  <span className='text-muted-foreground'>Total budget </span>
+                  </div>
+
+
+                  <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
+                    <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
+                    <Users className='size-8'/>
+                   {program.beneficiary_count} 
+                  </p>
+                  <span className='text-muted-foreground'>Total beneficiaries </span>
+                  </div>
+
+
+
+                </div>
+        
+                </div>
             
               </div>
 

@@ -16,8 +16,9 @@ interface ProjectFormProps {
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPending, submitLabel }) => {
   function capitalize(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
   }
+
   const [projectForm, setProjectForm] = useState({
     title: initialValues?.title || '',
     description: initialValues?.summary || '',
@@ -28,9 +29,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     endDate: initialValues?.deadline || '',
     status: initialValues?.status || 'Draft',
     currency: initialValues?.currency || '',
-    receiving_donation: initialValues.receiving_donation || false,
-    donation_reason:initialValues.donation_reason || ""
+    receiving_donation: initialValues?.receiving_donation || false,
+    donation_reason: initialValues?.donation_reason || '',
+    // Impact fields
+    impact_phrase: initialValues?.impact_phrase || '',
+    beneficiary_count: initialValues?.beneficiary_count ?? '',
+    impact_count: initialValues?.impact_count ?? ''
   });
+
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [currency, setCurrency] = useState('NGN');
@@ -39,33 +45,32 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
   const [mediaFilesPreview, setMediaFilesPreview] = useState<string[]>([]);
 
-  console.log(projectForm)
-
-useEffect(() => {
-  if (initialValues) {
-    // ...existing code...
-    setCoverPhotoPreview(initialValues.coverPhotoUrl || null);
-    setMediaFilesPreview(initialValues.mediaFilesUrls || []);
-  }
-}, [initialValues]);
-
+  useEffect(() => {
+    if (initialValues) {
+      setCoverPhotoPreview(initialValues.coverPhotoUrl || null);
+      setMediaFilesPreview(initialValues.mediaFilesUrls || []);
+    }
+  }, [initialValues]);
 
   const handleCoverPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     setCoverPhoto(file || null);
     setCoverPhotoPreview(file ? URL.createObjectURL(file) : null);
   };
+
   const handleMediaFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
     setMediaFiles(files);
     setMediaFilesPreview(files.map(file => URL.createObjectURL(file)));
   };
+
   const handleAddMilestone = () => {
     if (milestoneInput.trim()) {
       setMilestones([...milestones, milestoneInput.trim()]);
       setMilestoneInput('');
     }
   };
+
   const handleRemoveMilestone = (idx: number) => {
     setMilestones(milestones.filter((_, i) => i !== idx));
   };
@@ -84,6 +89,7 @@ useEffect(() => {
   return (
     <CardContent>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Title & Category */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Project Title</Label>
@@ -96,24 +102,25 @@ useEffect(() => {
           </div>
           <div>
             <Label>Category</Label>
-          <Select value={projectForm.category} onValueChange={value => setProjectForm({ ...projectForm, category: value })}>
-  <SelectTrigger>
-    {projectForm.category ? (
-      <SelectValue placeholder={projectForm.category} />
-    ) : (
-      <SelectValue placeholder="Select category" />
-    )}
-   
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="Education">Education</SelectItem>
-    <SelectItem value="Health">Health</SelectItem>
-    <SelectItem value="Environment">Environment</SelectItem>
-    <SelectItem value="Community">Community</SelectItem>
-  </SelectContent>
-</Select>
+            <Select value={projectForm.category} onValueChange={value => setProjectForm({ ...projectForm, category: value })}>
+              <SelectTrigger>
+                {projectForm.category ? (
+                  <SelectValue placeholder={projectForm.category} />
+                ) : (
+                  <SelectValue placeholder="Select category" />
+                )}
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Education">Education</SelectItem>
+                <SelectItem value="Health">Health</SelectItem>
+                <SelectItem value="Environment">Environment</SelectItem>
+                <SelectItem value="Community">Community</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
+
+        {/* Description */}
         <div>
           <Label>Description</Label>
           <Textarea
@@ -124,6 +131,8 @@ useEffect(() => {
             required
           />
         </div>
+
+        {/* Location & Goal */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Location</Label>
@@ -134,7 +143,7 @@ useEffect(() => {
             />
           </div>
           <div>
-            <Label>Goal Amount (₦)</Label>
+            <Label>Goal Amount ($)</Label>
             <Input
               type="number"
               value={projectForm.target_amount}
@@ -145,8 +154,9 @@ useEffect(() => {
             />
           </div>
         </div>
+
+        {/* End Date */}
         <div className="grid grid-cols-2 gap-4">
-         
           <div>
             <Label>End Date</Label>
             <Input
@@ -157,6 +167,8 @@ useEffect(() => {
             />
           </div>
         </div>
+
+        {/* Status */}
         <div>
           <Label>Status</Label>
           <Select value={projectForm.status} onValueChange={value => setProjectForm({ ...projectForm, status: value })}>
@@ -168,14 +180,14 @@ useEffect(() => {
               )}
             </SelectTrigger>
             <SelectContent>
-            
-              
               <SelectItem value="Draft">Draft</SelectItem>
               <SelectItem value="Active">Active</SelectItem>
               <SelectItem value="Completed">Completed</SelectItem>
             </SelectContent>
           </Select>
         </div>
+
+        {/* Currency & Milestones */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Currency</Label>
@@ -210,6 +222,43 @@ useEffect(() => {
             </ul>
           </div>
         </div>
+
+        {/* Impact Record */}
+        <div className="border p-4 rounded-md">
+          <h3 className="font-semibold mb-2">Impact Record</h3>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>Impact Phrase</Label>
+              <Input
+                value={projectForm.impact_phrase}
+                onChange={e => setProjectForm({ ...projectForm, impact_phrase: e.target.value })}
+                placeholder="e.g., Improved community health"
+              />
+            </div>
+            <div>
+              <Label>Beneficiary Count</Label>
+              <Input
+                type="number"
+                value={projectForm.beneficiary_count}
+                onChange={e => setProjectForm({ ...projectForm, beneficiary_count: e.target.value })}
+                placeholder="0"
+                min="0"
+              />
+            </div>
+            <div>
+              <Label>Impact Count</Label>
+              <Input
+                type="number"
+                value={projectForm.impact_count}
+                onChange={e => setProjectForm({ ...projectForm, impact_count: e.target.value })}
+                placeholder="0"
+                min="0"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Cover Photo */}
         <div>
           <Label>Cover Photo</Label>
           <Input
@@ -221,16 +270,28 @@ useEffect(() => {
             <img src={coverPhotoPreview} alt="Cover Preview" className="mt-2 w-32 h-32 object-cover rounded" />
           )}
         </div>
-{Array.isArray(initialValues.photos) && initialValues.photos.length > 0 && (   <div>
-          <Label>Donation Reason</Label>
-          <Input type='text' value={projectForm.donation_reason} onChange={e => setProjectForm({...projectForm, donation_reason:e.target.value } )} placeholder='reason for donation continuation'/>
-        </div>)}
-     
-       
+
+        {Array.isArray(initialValues?.photos) && initialValues.photos.length > 0 && (
+          <div>
+            <Label>Donation Reason</Label>
+            <Input
+              type='text'
+              value={projectForm.donation_reason}
+              onChange={e => setProjectForm({ ...projectForm, donation_reason: e.target.value })}
+              placeholder='Reason for donation continuation'
+            />
+          </div>
+        )}
+
+        {/* Donation Continue & Submit */}
         <div className="flex justify-between">
           <div className='flex gap-2'>
-             <Label>Donation Contnue</Label>
-            <Checkbox       onCheckedChange={e => setProjectForm({ ...projectForm, receiving_donation: !projectForm.receiving_donation })}  checked={projectForm.receiving_donation} value={projectForm.receiving_donation}/>
+            <Label>Donation Continue</Label>
+            <Checkbox
+              onCheckedChange={() => setProjectForm({ ...projectForm, receiving_donation: !projectForm.receiving_donation })}
+              checked={projectForm.receiving_donation}
+              value={projectForm.receiving_donation ? 'true' : 'false'}
+            />
           </div>
           <Button type="submit" disabled={isPending}>
             {isPending ? 'Saving...' : submitLabel || 'Save'}
