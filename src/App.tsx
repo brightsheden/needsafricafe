@@ -30,7 +30,7 @@ import Volunteer from "./pages/Volunteer";
 import ProjectProofPage from "./pages/proofs";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import ScrollToTop from './components/shared/ScrollToTop'; // adjust path as needed
+import ScrollToTop from './components/Shared/ScrollToTop'
 
 
 const queryClient = new QueryClient();
