@@ -117,9 +117,7 @@ const ProgramDetails = () => {
                 {/* Key Metrics */}
 
                 <div className=''>
-                  <h2 className="text-3xl font-bold font-heading mb-6">
-                  Key Metrics
-                </h2>
+                
                 <div  className='flex flex-col md:flex-row justify-between gap-4'>
                             <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
@@ -155,11 +153,10 @@ const ProgramDetails = () => {
               </div>
 
               {/* Proof of Delivery Section */}
+               <Separator />
               {photos.length > 0 && (
                 <div>
-                  <h2 className="text-3xl font-bold font-heading mb-6">
-                    Proof of Delivery
-                  </h2>
+                    <h4 className="font-semibold mb-2">Proof of delivery</h4>
                   <div className="space-y-4">
                     {/* Main Image */}
                   {mainImage && (
@@ -201,7 +198,7 @@ const ProgramDetails = () => {
   setMainImage(photo.image);
   setMainName(photo.name);
   setMainDate(photo.deliver_date);
-  setTimeout(() => setAnimateMainImage(false), 300); // match animation duration
+  setTimeout(() => setAnimateMainImage(false), 300); 
 }}
                         />
                       ))}

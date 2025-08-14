@@ -24,7 +24,7 @@ const ProjectEdit = () => {
           category: formData.projectForm.category?.toLowerCase() || '',
           location: formData.projectForm.location || null,
           target_amount: parseFloat(formData.projectForm.target_amount) || 0,
-          currency: formData.projectForm.currency || 'NGN',
+          currency: formData.projectForm.currency || 'USD',
           deadline: formData.projectForm.endDate || null,
           status: formData.projectForm.status || 'draft',
           receiving_donation:  formData.projectForm.receiving_donation || false ,
