@@ -191,7 +191,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Currency</Label>
-            <Select value={currency} onValueChange={setCurrency}>
+            <Select value={projectForm.currency} onValueChange={value => setProjectForm({ ...projectForm, currency: value })}>
               <SelectTrigger>
                 {projectForm.currency ? (
                   <SelectValue placeholder={projectForm.currency} />
@@ -202,7 +202,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
               <SelectContent>
                 <SelectItem value="NGN">NGN</SelectItem>
                 <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
+               
               </SelectContent>
             </Select>
           </div>
