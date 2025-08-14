@@ -67,9 +67,6 @@ const ProofOfDeliveryPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {project.photos.map((photo: any) => (
             <Card key={photo.id} className="relative">
-              <CardHeader>
-                <CardTitle>{photo.name}</CardTitle>
-              </CardHeader>
               <CardContent>
                 <img
                   src={`${API_URL}${photo.image}`}
@@ -77,7 +74,11 @@ const ProofOfDeliveryPage = () => {
                   className="w-full h-48 object-cover rounded-md mb-3"
                 />
                 <p className="text-sm text-muted-foreground mb-4">
-                  Delivered on: {photo.deliver_date}
+                  Name of Recipient Institution: {photo.name}
+
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Date of Delivery: {photo.deliver_date}
                 </p>
                 <Button
                   variant="destructive"
@@ -102,7 +103,7 @@ const ProofOfDeliveryPage = () => {
             <h2 className="text-2xl font-bold mb-4">Add Proof of Delivery</h2>
             <div className="space-y-4">
               <div>
-                <Label>Name</Label>
+                <Label>Name of Recipient Institution</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div>
