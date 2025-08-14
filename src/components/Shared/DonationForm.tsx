@@ -78,7 +78,7 @@ const DonationForm = ({ variant = "default", projectId }: DonationFormProps) => 
         </div>
         <CardTitle className="text-2xl font-bold">Make a Donation</CardTitle>
         <p className="text-muted-foreground">
-          Your support transforms lives by building more literate and healthier communities.
+          Comprehensive solutions addressing the most critical needs in education, healthcare, and community sustainability.
         </p>
       </CardHeader>
       <CardContent>

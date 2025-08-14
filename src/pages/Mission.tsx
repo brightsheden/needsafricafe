@@ -5,11 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import {  
   Globe
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Mission = () => {
 
-
-
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -54,25 +54,37 @@ We envision a future where surplus equipment in one part of the world becomes a 
 
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-impact text-white">
-        <div className="container mx-auto max-w-7xl px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Be Part of Our Mission
-          </h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
-            Our mission is only possible with partners like you. Join us in creating lasting change 
-            and building bridges to hope around the world.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
-              Support Our Mission
-            </Button>
-            <Button variant="outline" size="xl" className=" border-white hover:bg-white text-secondary">
-              Learn About Our Programs
-            </Button>
-          </div>
+    <section className="py-20 bg-gradient-impact text-white">
+      <div className="container mx-auto max-w-7xl px-6 text-center">
+        <Target className="h-16 w-16 mx-auto mb-6 text-primary" />
+        <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
+          Support a Project Today
+        </h2>
+        <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
+          Choose a project that resonates with your values and make a direct impact on the lives
+          of people who need it most. Every contribution, no matter the size, creates lasting change.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            variant="default"
+            size="xl"
+            className="bg-primary hover:bg-primary/90"
+            onClick={() => navigate('/donate')}
+          >
+            Donate Now
+          </Button>
+          <Button
+            variant="outline"
+            size="xl"
+            className="text-primary border-white hover:bg-white hover:text-secondary"
+            onClick={() => navigate('/volunteer')}
+          >
+            Become a Monthly Supporter
+          </Button>
         </div>
-      </section>
+      </div>
+    </section>
+
     </div>
   );
 };

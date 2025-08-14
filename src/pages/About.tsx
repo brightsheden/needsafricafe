@@ -4,8 +4,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Users, Heart, Award, Target } from 'lucide-react';
 import aboutPhoto from '@/assets/freepik.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const About = () => {
+  const navigate = useNavigate();
   const milestones = [
     { year: '2016', event: 'HopeBridge Founded', description: 'Started with a vision to transform communities through sustainable development' },
     { year: '2017', event: 'First School Built', description: 'Completed our first educational facility serving 200 children in rural Guatemala' },
@@ -119,24 +121,37 @@ const About = () => {
    
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-impact text-white">
-        <div className="container mx-auto max-w-7xl px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Join Our Story
-          </h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
-            Every great story needs many heroes. Become part of our journey and help us write the next chapter of hope and transformation.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
-              Support Our Mission
-            </Button>
-            <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
-              Volunteer With Us
-            </Button>
-          </div>
+    <section className="py-20 bg-gradient-impact text-white">
+      <div className="container mx-auto max-w-7xl px-6 text-center">
+        <Target className="h-16 w-16 mx-auto mb-6 text-primary" />
+        <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
+          Support a Project Today
+        </h2>
+        <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
+          Choose a project that resonates with your values and make a direct impact on the lives
+          of people who need it most. Every contribution, no matter the size, creates lasting change.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            variant="default"
+            size="xl"
+            className="bg-primary hover:bg-primary/90"
+            onClick={() => navigate('/donate')}
+          >
+            Donate Now
+          </Button>
+          <Button
+            variant="outline"
+            size="xl"
+            className="text-primary border-white hover:bg-white hover:text-secondary"
+            onClick={() => navigate('/volunteer')}
+          >
+            Become a Monthly Supporter
+          </Button>
         </div>
-      </section>
+      </div>
+    </section>
+
     </div>
   );
 };

@@ -4,19 +4,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useNavigate } from 'react-router-dom';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
+import { useSubmitVolunteer } from '@/api/volunteer';
 
 const Volunteer = () => {
+  const submitVolunteerMutation = useSubmitVolunteer();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     age: '',
     country: '',
     role: '',
-    type: '',
+    availability: '',
     hours: '',
     days: '',
     cv: null as File | null,
@@ -26,23 +29,38 @@ const Volunteer = () => {
   const formRef = useScrollAnimation();
   const infoRef = useScrollAnimation();
   const faqRef = useScrollAnimation();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    // Prepare payload for mutation hook
+    const { cv, ...form } = formData;
+
+    await submitVolunteerMutation.mutateAsync({ form, cv });
+
     console.log('Volunteer form submitted:', formData);
-    // reset form
+
+    // Reset form only after successful submission
     setFormData({
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       age: '',
       country: '',
       role: '',
-      type: '',
+      availability: '',
       hours: '',
       days: '',
       cv: null,
     });
-  };
+
+    navigate("/volunteer/thank-you");
+  } catch (error) {
+    console.error("Submission failed:", error);
+    // Optionally show an error message here
+  }
+};
 
   const handleChange = (field: string, value: string | File | null) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -88,7 +106,8 @@ const Volunteer = () => {
 
       {/* Main content */}
       <div className="container mx-auto max-w-7xl px-6 py-16">
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="flex justify-center">
+
           {/* Volunteer Form */}
           <div
             ref={formRef.ref}
@@ -107,18 +126,18 @@ const Volunteer = () => {
                     <div>
                       <Label>First Name *</Label>
                       <Input
-                        value={formData.firstName}
+                        value={formData.first_name}
                         required
-                        onChange={(e) => handleChange('firstName', e.target.value)}
+                        onChange={(e) => handleChange('first_name', e.target.value)}
                         placeholder="Your first name"
                       />
                     </div>
                     <div>
                       <Label>Last Name *</Label>
                       <Input
-                        value={formData.lastName}
+                        value={formData.last_name}
                         required
-                        onChange={(e) => handleChange('lastName', e.target.value)}
+                        onChange={(e) => handleChange('last_name', e.target.value)}
                         placeholder="Your last name"
                       />
                     </div>
@@ -168,8 +187,8 @@ const Volunteer = () => {
                   <div>
                     <Label>Volunteer Type *</Label>
                     <Select
-                      onValueChange={(value) => handleChange('type', value)}
-                      value={formData.type}
+                      onValueChange={(value) => handleChange('availability', value)}
+                      value={formData.availability}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select type" />
@@ -181,7 +200,7 @@ const Volunteer = () => {
                     </Select>
                   </div>
 
-                  {formData.type === 'part-time' && (
+                  {formData.availability === 'part-time' && (
                     <>
                       <div>
                         <Label>Part Time Hours</Label>
@@ -229,38 +248,6 @@ const Volunteer = () => {
               infoRef.isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
             }`}
           >
-            <Card className="shadow-medium">
-              <CardHeader>
-                <CardTitle className="text-2xl font-serif">Volunteer Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <MapPin className="h-6 w-6 text-primary mt-1" />
-                  <div>
-                    <h3 className="font-semibold">Office Address</h3>
-                    <p className="text-muted-foreground">
-                      12645 Memorial Dr Suite F1 <br /> #634 Houston, TX 77024
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <Phone className="h-6 w-6 text-primary mt-1" />
-                  <div>
-                    <h3 className="font-semibold">Phone Number</h3>
-                    <p className="text-muted-foreground">919-699-4012, 832-495-5157</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <Mail className="h-6 w-6 text-primary mt-1" />
-                  <div>
-                    <h3 className="font-semibold">Email Address</h3>
-                    <p className="text-muted-foreground">info@needsafrica.org</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
 

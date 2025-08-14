@@ -48,7 +48,7 @@ const Header = () => {
           {/* CTA Buttons */}
         
           <div className="hidden md:flex items-center space-x-4">
-              <Link to={'/vulunteer'}>
+              <Link to={'/volunteer'}>
                <Button variant="outline" size="sm">
               Volunteer
             </Button>
@@ -92,7 +92,7 @@ const Header = () => {
                 </Link>
               ))}
               <div className="pt-4 flex flex-col space-y-2">
-                <Link to={'/vulunteer'}>
+                <Link to={'/volunteer'}>
                  <Button variant="outline" size="sm">
                   Volunteer
                 </Button> 

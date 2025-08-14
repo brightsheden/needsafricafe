@@ -27,7 +27,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     target_amount: initialValues?.target_amount ? String(initialValues.target_amount) : '',
     startDate: initialValues?.startDate || '',
     endDate: initialValues?.deadline || '',
-    status: initialValues?.status || 'Draft',
+    status: capitalize(initialValues?.status) || 'DRAFT',
     currency: initialValues?.currency || '',
     receiving_donation: initialValues?.receiving_donation || false,
     donation_reason: initialValues?.donation_reason || '',
@@ -271,18 +271,24 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
           )}
         </div>
 
-        {Array.isArray(initialValues?.photos) && initialValues.photos.length > 0 && (
-          <div>
-            <Label>Donation Reason</Label>
-            <Input
-              type='text'
-              value={projectForm.donation_reason}
-              onChange={e => setProjectForm({ ...projectForm, donation_reason: e.target.value })}
-              placeholder='Reason for donation continuation'
-            />
-          </div>
+        {Array.isArray(initialValues?.photos) &&
+          initialValues.photos.length > 0 &&
+          projectForm.receiving_donation && (
+            <div>
+              <Label>Reason for Donation Continuation</Label>
+              <Input
+                type='text'
+                value={projectForm.donation_reason}
+                onChange={e =>
+                  setProjectForm({
+                    ...projectForm,
+                    donation_reason: e.target.value,
+                  })
+                }
+                placeholder='Reason for donation continuation'
+              />
+            </div>
         )}
-
         {/* Donation Continue & Submit */}
         <div className="flex justify-between">
           <div className='flex gap-2'>
