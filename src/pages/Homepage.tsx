@@ -219,7 +219,7 @@ const Homepage = () => {
                   Donate Today
                 </Button>
               </Link>
-              <Link to="/contact">
+              <Link to="/volunteer">
                 <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
                   Become a Volunteer
                 </Button>

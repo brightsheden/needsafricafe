@@ -87,6 +87,10 @@ export const useUpdateProject = () => {
       if (cover_photo) {
         formData.append('cover_photo', cover_photo);
       }
+      if (!payload.impact_count || payload.impact_count === ''){
+        delete payload.impact_count;}
+        if (!payload.beneficiary_count || payload.beneficiary_count === ''){
+        delete payload.beneficiary_count;}
 
       formData.append('payload', JSON.stringify(payload));
 
