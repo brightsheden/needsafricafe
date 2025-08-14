@@ -33,13 +33,13 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     donation_reason: initialValues?.donation_reason || '',
     // Impact fields
     impact_phrase: initialValues?.impact_phrase || '',
-    beneficiary_count: initialValues?.beneficiary_count ?? '',
-    impact_count: initialValues?.impact_count ?? ''
+    beneficiary_count: initialValues?.beneficiary_count ?? null,
+    impact_count: initialValues?.impact_count ?? null
   });
 
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
-  const [currency, setCurrency] = useState('NGN');
+  const [currency, setCurrency] = useState(initialValues?.currency || 'USD');
   const [milestoneInput, setMilestoneInput] = useState('');
   const [milestones, setMilestones] = useState<string[]>([]);
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
