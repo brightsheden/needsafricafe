@@ -35,6 +35,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     impact_phrase: initialValues?.impact_phrase || '',
     beneficiary_count: initialValues?.beneficiary_count ?? null,
     impact_count: initialValues?.impact_count ?? null
+
   });
 
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
