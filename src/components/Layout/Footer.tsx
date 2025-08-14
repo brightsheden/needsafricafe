@@ -46,7 +46,7 @@ const Footer = () => {
                 { name: 'Our Mission', href: '/mission' },
                 // { name: 'Impact Stories', href: '/impact' },
                 { name: 'Projects', href: '/projects' },
-                { name: 'Get Involved', href: '/volunteer' },
+//                 { name: 'Get Involved', href: '/volunteer' },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

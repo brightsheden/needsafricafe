@@ -29,7 +29,7 @@ const CreateProject = () => {
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currency, setCurrency] = useState("NGN");
+  const [currency, setCurrency] = useState("USD");
   const [milestoneInput, setMilestoneInput] = useState("");
   const [milestones, setMilestones] = useState<string[]>([]);
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
@@ -138,7 +138,7 @@ const CreateProject = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Education">Education</SelectItem>
-                      <SelectItem value="Health">Health</SelectItem>
+                      <SelectItem value="Healthcae">Healthcare</SelectItem>
                       <SelectItem value="Environment">Environment</SelectItem>
                       <SelectItem value="Community">Community</SelectItem>
                     </SelectContent>
@@ -165,7 +165,7 @@ const CreateProject = () => {
                   />
                 </div>
                 <div>
-                  <Label>Goal Amount (₦)</Label>
+                <Label>Goal Amount ($)</Label>
                   <Input
                     type="number"
                     value={projectForm.goal}

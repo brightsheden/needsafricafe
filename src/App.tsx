@@ -25,10 +25,13 @@ import ProjectEdit from "./pages/admin/ProjectEdit";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminRegister from "./pages/admin/auth/Register";
 import ThankYou from "./pages/ThankYou";
-import Volunteer from "./pages/Vulunteer";
+import VolunteerThankYou from "./pages/VolunteerThankYou";
+import Volunteer from "./pages/Volunteer";
 import ProjectProofPage from "./pages/proofs";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ScrollToTop from './components/shared/ScrollToTop'; // adjust path as needed
+
 
 const queryClient = new QueryClient();
 
@@ -37,6 +40,9 @@ const AppContent = () => {
   const isAdminRoute = location.pathname.startsWith("/admin");
   return (
     <div className="min-h-screen flex flex-col">
+          <ScrollToTop /> {/* 👈 This is important */}
+
+
       {!isAdminRoute && <Header />}
       <main className="flex-1">
         <Routes>
@@ -59,7 +65,8 @@ const AppContent = () => {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/register" element={<AdminRegister/>} />
           <Route path="/thankyou" element={<ThankYou />} />
-          <Route path="/vulunteer" element={<Volunteer/>}/>
+          <Route path="/volunteer" element={<Volunteer/>}/>
+          <Route path="/volunteer/thank-you" element={<VolunteerThankYou />} />
           <Route path="/projects/proof/:projectId" element={<ProjectProofPage/>} />
            
           <Route path="*" element={<NotFound />} />

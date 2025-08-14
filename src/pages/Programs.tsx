@@ -13,17 +13,19 @@ import {
   Users,
   Target
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
 import { useProjects } from '@/api/projects';
 import { API_URL } from "../../config";
 
 const Projects = () => {
+  const navigate = useNavigate();
+
   const [activeFilter, setActiveFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('active'); // New: 'active' or 'completed'
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 10;
-
-  const categories = ['All', 'Education', 'Healthcare', 'Community Development'];
 
   const { data, isLoading, isError } = useProjects({
     search: searchTerm,
@@ -33,19 +35,54 @@ const Projects = () => {
     page_size: pageSize
   });
 
-  const projects = data?.data || [];
+
+    const categoryMap = {
+      'Education': ['education', 'schools', 'edu'],
+      'Healthcare': ['healthcare', 'health', 'medical'],
+      'Community Development': ['community development', 'community', 'community-development'],
+    };
+    const projects = data?.data || []; // your JSON uses data: [ ... ]
   const total = data?.total || 0;
   const totalPages = data?.total_pages || 1;
+    const categories = ['All', 'Education', 'Healthcare', 'Community Development'];
 
-  const categoryStats = categories.slice(1).map(category => {
-    const categoryProjects = projects.filter(p => p.category === category.toLowerCase());
-    return {
-      name: category,
-      count: categoryProjects.length,
-      totalBudget: categoryProjects.reduce((sum, p) => sum + parseInt(p.target_amount.replace(/[$,]/g, '')), 0),
-      totalImpact: 0
-    };
-  });
+    const statusLabel = statusFilter === 'active' ? 'Active' : 'Completed';
+    const statusFilterNormalized = (statusFilter || '').toString().toLowerCase();
+
+    const categoryStats = categories.slice(1).map(category => {
+      const displayKey = category; // e.g. 'Education'
+      const mappedKeys = (categoryMap[displayKey] || [displayKey.toLowerCase()]).map(k => k.toString().toLowerCase().trim());
+
+      // filter projects for both category match and status match
+      const categoryProjects = projects.filter(p => {
+        const pCat = (p?.category || '').toString().toLowerCase().trim();
+        const pStatus = (p?.status || '').toString().toLowerCase().trim(); // 'active' or 'completed' etc.
+
+        const catMatch = mappedKeys.includes(pCat);
+        const statusMatch = pStatus === statusFilterNormalized; // case-insensitive match
+
+        return catMatch && statusMatch;
+      });
+
+      const totalBudget = categoryProjects.reduce((sum, p) => {
+        const raw = (p?.target_amount ?? '0').toString().replace(/[$,]/g, '');
+        const n = Number.parseFloat(raw);
+        return sum + (Number.isFinite(n) ? n : 0);
+      }, 0);
+
+      return {
+        name: displayKey,
+        count: categoryProjects.length,
+        totalBudget,
+        totalImpact: 0
+      };
+    });
+  const lgColsClass =
+  categoryStats.length === 1 ? 'lg:grid-cols-1'
+  : categoryStats.length === 2 ? 'lg:grid-cols-2'
+  : categoryStats.length === 3 ? 'lg:grid-cols-3'
+  : 'lg:grid-cols-4';
+
 
   return (
     <div className="min-h-screen">
@@ -61,8 +98,7 @@ const Projects = () => {
               <span className="block text-primary">Educational and Health Change</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Explore our diverse portfolio of projects designed to address the root causes of poverty 
-              and create sustainable pathways to prosperity in communities worldwide.
+              Explore our diverse portfolio of projects designed to address the root causes of poor literacy, ill health and create sustainable pathways to improved quality of education and care in communities around Africa.
             </p>
           </div>
         </div>
@@ -77,20 +113,19 @@ const Projects = () => {
       {/* Project Statistics */}
       <section className="py-16 bg-background">
         <div className="container mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className={`grid grid-cols-1 md:grid-cols-2 ${lgColsClass} gap-6`}>
             {categoryStats.map((stat, index) => (
               <Card key={index} className="text-center shadow-medium hover:shadow-strong transition-all duration-300">
                 <CardContent className="p-6">
                   <div className="mb-4">
                     {stat.name === 'Education' && <GraduationCap className="h-8 w-8 mx-auto text-primary" />}
                     {stat.name === 'Healthcare' && <Heart className="h-8 w-8 mx-auto text-primary" />}
-                    {stat.name === 'Environment' && <Leaf className="h-8 w-8 mx-auto text-primary" />}
                     {stat.name === 'Community Development' && <Users className="h-8 w-8 mx-auto text-primary" />}
                   </div>
                   <h3 className="text-lg font-bold font-heading mb-2">{stat.name}</h3>
                   <div className="space-y-1">
                     <p className="text-2xl font-bold text-primary">{stat.count}</p>
-                    <p className="text-sm text-muted-foreground">Active Projects</p>
+                    <p className="text-sm text-muted-foreground">{statusLabel}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -207,26 +242,36 @@ const Projects = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-impact text-white">
-        <div className="container mx-auto max-w-7xl px-6 text-center">
-          <Target className="h-16 w-16 mx-auto mb-6 text-primary" />
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Support a Project Today
-          </h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
-            Choose a project that resonates with your values and make a direct impact on the lives 
-            of people who need it most. Every contribution, no matter the size, creates lasting change.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="default" size="xl" className="bg-primary hover:bg-primary/90">
-              Donate Now
-            </Button>
-            <Button variant="outline" size="xl" className="text-primary border-white hover:bg-white hover:text-secondary">
-              Become a Monthly Supporter
-            </Button>
-          </div>
+    <section className="py-20 bg-gradient-impact text-white">
+      <div className="container mx-auto max-w-7xl px-6 text-center">
+        <Target className="h-16 w-16 mx-auto mb-6 text-primary" />
+        <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
+          Support a Project Today
+        </h2>
+        <p className="text-xl mb-8 max-w-3xl mx-auto text-white/90">
+          Choose a project that resonates with your values and make a direct impact on the lives
+          of people who need it most. Every contribution, no matter the size, creates lasting change.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            variant="default"
+            size="xl"
+            className="bg-primary hover:bg-primary/90"
+            onClick={() => navigate('/donate')}
+          >
+            Donate Now
+          </Button>
+          <Button
+            variant="outline"
+            size="xl"
+            className="text-primary border-white hover:bg-white hover:text-secondary"
+            onClick={() => navigate('/volunteer')}
+          >
+            Become a Monthly Supporter
+          </Button>
         </div>
-      </section>
+      </div>
+    </section>
     </div>
   );
 };

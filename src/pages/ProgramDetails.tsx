@@ -261,7 +261,7 @@ const ProgramDetails = () => {
                   </div>
                   <Separator />
                   {program.donation_reason && (<div>
-                    <CardTitle> Donation Reason</CardTitle>
+                    <CardTitle> Reason for Donation Continuation</CardTitle>
                   
                     <span className='text-sm'>{program.donation_reason}</span>
                   </div>)}
