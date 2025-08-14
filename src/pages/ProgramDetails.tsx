@@ -122,7 +122,7 @@ const ProgramDetails = () => {
                             <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
                     <Target className='size-8'/>
-                   {program?.impact_count} {program?.impact_phrase}
+                  {program?.impact_phrase}
                   </p>
                   <span className='text-muted-foreground'>Direct impact </span>
                   </div>
@@ -130,7 +130,7 @@ const ProgramDetails = () => {
                    <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed  flex justify-between flex-col items-center">
                     <DollarSign className='size-8'/>
-                   {program.impact_count} {program?.total_amount}
+                   {Number(program.target_amount).toFixed(2)}
                   </p>
                   <span className='text-muted-foreground'>Total budget </span>
                   </div>

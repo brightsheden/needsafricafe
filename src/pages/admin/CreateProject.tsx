@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { useCreateProject } from '@/api/projects';
-import { API_URL } from '../../../config';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from "./AdminLayout";
@@ -38,7 +32,7 @@ const CreateProject = () => {
            // Impact fields
           impact_phrase: formData.projectForm.impact_phrase || '',
           beneficiary_count: formData.projectForm.beneficiary_count ?? 0,
-          impact_count: formData.projectForm.impact_count ?? 0
+          // impact_count: formData.projectForm.impact_count ?? 0
         },
         cover_photo: formData.coverPhoto || null,
         media_files: formData.mediaFiles || [],

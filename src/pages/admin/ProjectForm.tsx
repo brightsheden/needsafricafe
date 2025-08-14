@@ -229,11 +229,11 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
           <h3 className="font-semibold mb-2">Impact Record</h3>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>Impact Phrase</Label>
+             
               <Input
                 value={projectForm.impact_phrase}
                 onChange={e => setProjectForm({ ...projectForm, impact_phrase: e.target.value })}
-                placeholder="e.g., Improved community health"
+                placeholder="e.g., 200+"
               />
             </div>
             <div>
@@ -246,7 +246,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
                 min="0"
               />
             </div>
-            <div>
+            {/* <div>
               <Label>Impact Count</Label>
               <Input
                 type="number"
@@ -255,7 +255,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
                 placeholder="0"
                 min="0"
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
