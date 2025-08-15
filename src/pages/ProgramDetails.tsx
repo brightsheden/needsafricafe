@@ -15,6 +15,7 @@ import {
   Share2,
   User,
   Users,
+  CheckCircle
 } from 'lucide-react';
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
@@ -206,6 +207,22 @@ const ProgramDetails = () => {
                   </div>
                 </div>
               )}
+
+
+                          {/* Achievements */}
+            {program.milestones?.length > 0 && (
+              <div className="transition-all duration-1000 delay-500">
+                <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
+                <div className="space-y-4">
+                  {program.milestones.map((achievement, index) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                      <span className="text-muted-foreground">{achievement}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
               {/* Share Section */}
               <div className="pt-8 border-t">
