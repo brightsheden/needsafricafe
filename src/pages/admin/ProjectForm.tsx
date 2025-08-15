@@ -34,7 +34,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     // Impact fields
     impact_phrase: initialValues?.impact_phrase || '',
     beneficiary_count: initialValues?.beneficiary_count ?? null,
-    impact_count: initialValues?.impact_count ?? null
+    impact_count: initialValues?.impact_count ?? null,
+    milestones: initialValues?.milestones ?? []
 
   });
 
@@ -42,7 +43,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [currency, setCurrency] = useState(initialValues?.currency || 'USD');
   const [milestoneInput, setMilestoneInput] = useState('');
-  const [milestones, setMilestones] = useState<string[]>([]);
+  const [milestones, setMilestones] = useState<string[]>(initialValues?.milestones || []);
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
   const [mediaFilesPreview, setMediaFilesPreview] = useState<string[]>([]);
 
@@ -113,8 +114,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Education">Education</SelectItem>
-                <SelectItem value="Health">Health</SelectItem>
-                <SelectItem value="Environment">Environment</SelectItem>
+                <SelectItem value="Healthcare">Health</SelectItem>
                 <SelectItem value="Community">Community</SelectItem>
               </SelectContent>
             </Select>
@@ -201,9 +201,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
                 )}
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="NGN">NGN</SelectItem>
                 <SelectItem value="USD">USD</SelectItem>
-               
+                <SelectItem value="NGN">NGN</SelectItem>
+
               </SelectContent>
             </Select>
           </div>
@@ -225,39 +225,29 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
         </div>
 
         {/* Impact Record */}
-        <div className="border p-4 rounded-md">
-          <h3 className="font-semibold mb-2">Impact Record</h3>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-             
-              <Input
-                value={projectForm.impact_phrase}
-                onChange={e => setProjectForm({ ...projectForm, impact_phrase: e.target.value })}
-                placeholder="e.g., 200+"
-              />
-            </div>
-            <div>
-              <Label>Beneficiary Count</Label>
-              <Input
-                type="number"
-                value={projectForm.beneficiary_count}
-                onChange={e => setProjectForm({ ...projectForm, beneficiary_count: e.target.value })}
-                placeholder="0"
-                min="0"
-              />
-            </div>
-            {/* <div>
-              <Label>Impact Count</Label>
-              <Input
-                type="number"
-                value={projectForm.impact_count}
-                onChange={e => setProjectForm({ ...projectForm, impact_count: e.target.value })}
-                placeholder="0"
-                min="0"
-              />
-            </div> */}
-          </div>
-        </div>
+<div className="border p-4 rounded-md">
+  <h3 className="font-semibold mb-2">Impact Record</h3>
+  <div className="grid grid-cols-3 gap-4">
+    <div>
+      <Label>Impact Phrase</Label> {/* <-- Add this */}
+      <Input
+        value={projectForm.impact_phrase}
+        onChange={e => setProjectForm({ ...projectForm, impact_phrase: e.target.value })}
+        placeholder="e.g., 200+ Patients"
+      />
+    </div>
+    <div>
+      <Label>Beneficiary Count</Label>
+      <Input
+        type="number"
+        value={projectForm.beneficiary_count}
+        onChange={e => setProjectForm({ ...projectForm, beneficiary_count: e.target.value })}
+        placeholder="0"
+        min="0"
+      />
+    </div>
+  </div>
+</div>
 
         {/* Cover Photo */}
         <div>

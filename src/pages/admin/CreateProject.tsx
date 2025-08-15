@@ -15,7 +15,6 @@ const CreateProject = () => {
   const { toast } = useToast();
 
   const handleSubmit = async (formData:any) => {
-  
     try {
       const data = {
       payload: {
@@ -32,6 +31,8 @@ const CreateProject = () => {
            // Impact fields
           impact_phrase: formData.projectForm.impact_phrase || '',
           beneficiary_count: formData.projectForm.beneficiary_count ?? 0,
+         milestones: formData.milestones ?? []
+
           // impact_count: formData.projectForm.impact_count ?? 0
         },
         cover_photo: formData.coverPhoto || null,
