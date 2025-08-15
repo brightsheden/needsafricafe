@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useProject, useAddProjectPhotos, useDeleteProjectPhoto } from "@/api/projects";
 import { Trash2, Plus } from "lucide-react";
 import { API_URL } from "../../config";
+import { IconLeft } from "react-day-picker";
 
 const ProofOfDeliveryPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -21,6 +22,11 @@ const ProofOfDeliveryPage = () => {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+
+  const navigate = useNavigate()
+  const handeleGoback =()=>{
+    navigate(-1)
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,6 +62,7 @@ const ProofOfDeliveryPage = () => {
 
   return (
     <div className="container mx-auto max-w-6xl py-10">
+      <Button onClick={handeleGoback}><IconLeft/> Back</Button>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl md:text-3xl font-bold">Proof of Delivery - {project?.title}</h1>
         <Button onClick={() => setIsModalOpen(true)}>
