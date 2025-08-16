@@ -27,16 +27,18 @@ const ProgramDetails = () => {
   const program = data?.data;
 
   const photos = program?.photos?.filter((p) => p.image) || [];
-  const [mainImage, setMainImage] = useState(photos[0] || null);
-  const [mainName, setMainName] = useState(photos[0]?.name || '');
-  const [mainDate, setMainDate] = useState(photos[0]?.deliver_date || '');
+  const [mainImage, setMainImage] = useState(null);
+  const [mainName, setMainName] = useState('');
+  const [mainDate, setMainDate] = useState('');
   const [animateMainImage, setAnimateMainImage] = useState(false);
 
-  useEffect(()=>{
-    setMainImage(photos[0]?.image || null)
-    setMainName(photos[0]?.name || '')
-    setMainDate(photos[0]?.deliver_date || '')
-  },[photos])
+useEffect(() => {
+  if (photos.length > 0 && !mainImage) {
+    setMainImage(photos[0].image);
+    setMainName(photos[0].name);
+    setMainDate(photos[0].deliver_date);
+  }
+}, [photos, mainImage]);
 
   if (!program) {
     return (
@@ -201,12 +203,12 @@ const ProgramDetails = () => {
                               : 'border-transparent'
                           }`}
                      onClick={() => {
-  setAnimateMainImage(true);
-  setMainImage(photo.image);
-  setMainName(photo.name);
-  setMainDate(photo.deliver_date);
-  setTimeout(() => setAnimateMainImage(false), 300); 
-}}
+                              setAnimateMainImage(true);
+                              setMainImage(photo.image);
+                              setMainName(photo.name);
+                              setMainDate(photo.deliver_date);
+                              setTimeout(() => setAnimateMainImage(false), 300); 
+                            }}
                         />
                       ))}
                     </div>
