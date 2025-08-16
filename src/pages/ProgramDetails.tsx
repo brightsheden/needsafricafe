@@ -86,7 +86,7 @@ useEffect(() => {
 
             <Badge
               variant="secondary"
-              className="mb-4 bg-white/20 text-white border-white/30"
+              className="mx-4 mb-4 bg-white/20 text-white border-white/30"
             >
               {program?.category}
             </Badge>
