@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,10 +27,16 @@ const ProgramDetails = () => {
   const program = data?.data;
 
   const photos = program?.photos?.filter((p) => p.image) || [];
-  const [mainImage, setMainImage] = useState(photos[0]?.image || null);
+  const [mainImage, setMainImage] = useState(photos[0] || null);
   const [mainName, setMainName] = useState(photos[0]?.name || '');
   const [mainDate, setMainDate] = useState(photos[0]?.deliver_date || '');
   const [animateMainImage, setAnimateMainImage] = useState(false);
+
+  useEffect(()=>{
+    setMainImage(photos[0]?.image || null)
+    setMainName(photos[0]?.name || '')
+    setMainDate(photos[0]?.deliver_date || '')
+  },[photos])
 
   if (!program) {
     return (
@@ -161,14 +167,14 @@ const ProgramDetails = () => {
                   <div className="space-y-4">
                     {/* Main Image */}
                   {mainImage && (
-  <img
-    src={`${API_URL}${mainImage}`}
-    alt="Proof of Delivery"
-     className={`w-[800px] h-[500px] mx-auto rounded-lg object-cover transition-transform duration-300 ${
-      animateMainImage ? 'scale-105 opacity-0' : 'scale-100 opacity-100'
-    }`}
-  />
-)}
+                      <img
+                        src={`${API_URL}${mainImage}`}
+                        alt="Proof of Delivery"
+                        className={`w-[800px] h-[500px] mx-auto rounded-lg object-cover transition-transform duration-300 ${
+                          animateMainImage ? 'scale-105 opacity-0' : 'scale-100 opacity-100'
+                        }`}
+                      />
+                    )}
                     {/* Recipient Info */}
                     <div className="text-center mt-2">
                       <p className="text-lg font-semibold">
