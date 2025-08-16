@@ -33,7 +33,8 @@ const ProjectEdit = () => {
           impact_phrase: formData.projectForm.impact_phrase || '',
           beneficiary_count: formData.projectForm.beneficiary_count ?? 0,
           impact_count: formData.projectForm.impact_count ?? 0,
-          milestones: formData.milestones ?? []
+          milestones: formData.milestones ?? [],
+          goals: formData.goals ?? [],
         },
 
         cover_photo: formData.coverPhoto || null,
