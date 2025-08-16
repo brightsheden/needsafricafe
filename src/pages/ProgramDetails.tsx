@@ -20,6 +20,7 @@ import {
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
 import { error } from 'console';
+import { formatCurrency } from '@/lib/utils';
 
 const ProgramDetails = () => {
   const { id } = useParams();
@@ -144,7 +145,7 @@ useEffect(() => {
                    <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed  flex justify-between flex-col items-center">
                     <DollarSign className='size-8'/>
-                   {Number(program?.target_amount).toFixed(2)}
+                   {formatCurrency(program?.target_amount)}
                   </p>
                   <span className='text-muted-foreground'>Total budget </span>
                   </div>
@@ -305,7 +306,7 @@ useEffect(() => {
                   <div>
                     <div className="flex justify-between text-sm mb-2">
                       <span>
-                        Raised: {program?.currency} {program?.amount_raised}
+                        Raised: {program?.currency} {formatCurrency(program?.amount_raised)}
                       </span>
                       <span>{program?.percentage_funded.toFixed(2)}%</span>
                     </div>
@@ -314,7 +315,7 @@ useEffect(() => {
                       className="h-3"
                     />
                     <div className="text-sm text-muted-foreground mt-2">
-                      Goal: {program?.currency} {program?.target_amount}
+                      Goal: {program?.currency} {formatCurrency(program?.target_amount)}
                     </div>
                   </div>
                   <Separator />

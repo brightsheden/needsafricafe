@@ -158,7 +158,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
             <Label>Goal Amount ($)</Label>
             <Input
               type="number"
-              value={projectForm.target_amount}
+              value={(projectForm.target_amount)}
               onChange={e => setProjectForm({ ...projectForm, target_amount: e.target.value })}
               placeholder="Enter goal amount"
               min="0"
