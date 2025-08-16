@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {capitalize} from '@/lib/utils'
 import { 
   Plus, 
   Search, 
@@ -310,7 +311,7 @@ const ProjectManagement = () => {
               <div className="absolute top-2 right-2 flex gap-2">
                 {getStatusBadge(project.status)}
                 <Badge className={getCategoryColor(project.category)}>
-                  {project.category}
+                  {capitalize(project.category)}
                 </Badge>
               </div>
             </div>

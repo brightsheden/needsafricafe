@@ -14,6 +14,8 @@ import {
   Target
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import {capitalize} from '@/lib/utils'
+
 
 import { useProjects } from '@/api/projects';
 import { API_URL } from "../../config";
@@ -208,7 +210,7 @@ const Projects = () => {
                   title={project.title}
                   description={project.summary}
                   image={`${API_URL}${project.cover_image}`}
-                  category={project.category}
+                  category={capitalize(project.category)}
                   impact={project.impact}
                   href={`/projects/${project.id}`}
                 />

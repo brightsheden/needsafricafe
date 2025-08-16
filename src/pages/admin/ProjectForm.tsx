@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import {capitalize} from '@/lib/utils'
 
 interface ProjectFormProps {
   initialValues?: any;
@@ -15,9 +16,6 @@ interface ProjectFormProps {
 }
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPending, submitLabel }) => {
-  function capitalize(str: string) {
-    return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
-  }
 
   const [projectForm, setProjectForm] = useState({
     title: initialValues?.title || '',
@@ -35,7 +33,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     impact_phrase: initialValues?.impact_phrase || '',
     beneficiary_count: initialValues?.beneficiary_count ?? null,
     impact_count: initialValues?.impact_count ?? null,
-    milestones: initialValues?.milestones ?? []
+    milestones: initialValues?.milestones ?? [],
+    goals: initialValues?.goals ?? []
 
   });
 
@@ -43,7 +42,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [currency, setCurrency] = useState(initialValues?.currency || 'USD');
   const [milestoneInput, setMilestoneInput] = useState('');
+  const [goalInput, setGoalInput] = useState('');
   const [milestones, setMilestones] = useState<string[]>(initialValues?.milestones || []);
+  const [goals, setGoals] = useState<string[]>(initialValues?.goals || []);
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
   const [mediaFilesPreview, setMediaFilesPreview] = useState<string[]>([]);
 
@@ -72,9 +73,18 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
       setMilestoneInput('');
     }
   };
+  const handleAddGoal = () => {
+    if (goalInput.trim()) {
+      setGoals([...goals, goalInput.trim()]);
+      setGoalInput('');
+    }
+  };
 
   const handleRemoveMilestone = (idx: number) => {
     setMilestones(milestones.filter((_, i) => i !== idx));
+  };
+  const handleRemoveGoal = (idx: number) => {
+    setGoals(goals.filter((_, i) => i !== idx));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,6 +95,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
       mediaFiles,
       currency,
       milestones,
+      goals,
     });
   };
 
@@ -246,6 +257,22 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
         min="0"
       />
     </div>
+          <div>
+            <Label>Goals</Label>
+            <div className="flex gap-2">
+              <Input value={goalInput} onChange={e => setGoalInput(e.target.value)} placeholder="Add goal" />
+              <Button type="button" onClick={handleAddGoal}>Add</Button>
+            </div>
+            <ul className="mt-2 list-disc pl-5">
+              {goals.map((m, idx) => (
+                <li key={idx} className="flex items-center justify-between">
+                  <span>{m}</span>
+                  <Button type="button" size="sm" variant="ghost" onClick={() => handleRemoveGoal(idx)}>Remove</Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
   </div>
 </div>
 
