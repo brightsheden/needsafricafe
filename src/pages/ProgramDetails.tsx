@@ -57,7 +57,7 @@ useEffect(() => {
         <div className='card '>{error.message}</div>
         </div>
       </div>)
-     
+
 
   }
 
@@ -153,7 +153,7 @@ useEffect(() => {
                   <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
                     <Users className='size-8'/>
-                   {program?.beneficiary_count} 
+                   {program?.beneficiary_count}
                   </p>
                   <span className='text-muted-foreground'>Total beneficiaries </span>
                   </div>
@@ -237,6 +237,36 @@ useEffect(() => {
                   </div>
                 </div>
               )}
+
+
+              {/* Program Goals */}
+              {program.goals?.length > 0 && ( <div className="transition-all duration-1000 delay-400">
+                <h3 className="text-2xl font-bold font-heading mb-6">Program Goals</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {program.goals.map((goal, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-4 bg-muted/30 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span className="text-muted-foreground">{goal}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              )}
+
+                          {/* Achievements */}
+            {program.milestones?.length > 0 && (
+              <div className="transition-all duration-1000 delay-500">
+                <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
+                <div className="space-y-4">
+                  {program.milestones.map((achievement, index) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                      <span className="text-muted-foreground">{achievement}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
               {/* Share Section */}
               <div className="pt-8 border-t">
