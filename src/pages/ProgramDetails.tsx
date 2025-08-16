@@ -19,11 +19,12 @@ import {
 } from 'lucide-react';
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
+import { error } from 'console';
 
 const ProgramDetails = () => {
   const { id } = useParams();
   const projectId = Number(id);
-  const { data, isLoading, isError } = useProject(projectId);
+  const { data, isPending, isError,error } = useProject(projectId);
   const program = data?.data;
 
   const photos = program?.photos?.filter((p) => p.image) || [];
@@ -40,20 +41,24 @@ useEffect(() => {
   }
 }, [photos, mainImage]);
 
-  if (!program) {
+  if (isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Program Not Found</h1>
-          <Link to="/programs">
-            <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Programs
-            </Button>
-          </Link>
+      <div className=" flex items-center justify-center">
+         <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
         </div>
       </div>
     );
+  }
+
+  if(isError){
+    return (<div className="min-h-screen flex items-center justify-center">
+         <div className="flex items-center justify-center">
+        <div className='card '>{error.message}</div>
+        </div>
+      </div>)
+     
+
   }
 
   return (
@@ -62,8 +67,8 @@ useEffect(() => {
       <section className="relative h-[60vh] overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src={`${API_URL}${program.cover_image}`}
-            alt={program.title}
+            src={`${API_URL}${program?.cover_image}`}
+            alt={program?.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/50" />
@@ -87,21 +92,21 @@ useEffect(() => {
             </Badge>
 
             <h1 className="text-4xl md:text-5xl font-bold font-heading mb-4">
-              {program.title}
+              {program?.title}
             </h1>
 
             <p className="text-xl text-white/90 mb-6 leading-relaxed">
-              {program.summary}
+              {program?.summary}
             </p>
 
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center">
                 <MapPin className="h-4 w-4 mr-2" />
-                {program.location}
+                {program?.location}
               </div>
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-2" />
-                {program.deadline}
+                {program?.deadline}
               </div>
             </div>
           </div>
@@ -120,7 +125,7 @@ useEffect(() => {
                   Program Overview
                 </h2>
                 <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                  {program.summary}
+                  {program?.summary}
                 </p>
 
                 {/* Key Metrics */}
@@ -139,7 +144,7 @@ useEffect(() => {
                    <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed  flex justify-between flex-col items-center">
                     <DollarSign className='size-8'/>
-                   {Number(program.target_amount).toFixed(2)}
+                   {Number(program?.target_amount).toFixed(2)}
                   </p>
                   <span className='text-muted-foreground'>Total budget </span>
                   </div>
@@ -148,7 +153,7 @@ useEffect(() => {
                   <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
                     <Users className='size-8'/>
-                   {program.beneficiary_count} 
+                   {program?.beneficiary_count} 
                   </p>
                   <span className='text-muted-foreground'>Total beneficiaries </span>
                   </div>
@@ -161,11 +166,28 @@ useEffect(() => {
             
               </div>
 
-              {/* Proof of Delivery Section */}
+ <Separator />
+                          {/* Achievements */}
+            {program?.milestones?.length > 0 && (
+              <div className="transition-all duration-1000 delay-500">
+                <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
+                <div className="space-y-4">
+                  {program?.milestones.map((achievement, index) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                      <span className="text-muted-foreground">{achievement}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+
+                  {/* Proof of Delivery Section */}
                <Separator />
-              {photos.length > 0 && (
+              {photos?.length > 0 && (
                 <div>
-                    <h4 className="font-semibold mb-2">Proof of delivery</h4>
+                    <h4 className="text-2xl font-bold font-heading mb-6">Proof of delivery</h4>
                   <div className="space-y-4">
                     {/* Main Image */}
                   {mainImage && (
@@ -216,22 +238,6 @@ useEffect(() => {
                 </div>
               )}
 
-
-                          {/* Achievements */}
-            {program.milestones?.length > 0 && (
-              <div className="transition-all duration-1000 delay-500">
-                <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
-                <div className="space-y-4">
-                  {program.milestones.map((achievement, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-                      <span className="text-muted-foreground">{achievement}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
               {/* Share Section */}
               <div className="pt-8 border-t">
                 <div className="flex items-center justify-between">
@@ -258,10 +264,10 @@ useEffect(() => {
                     Funding Progress
                     <Badge
                       variant={
-                        program.status === 'Active' ? 'default' : 'secondary'
+                        program?.status === 'Active' ? 'default' : 'secondary'
                       }
                     >
-                      {program.status}
+                      {program?.status}
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -269,30 +275,30 @@ useEffect(() => {
                   <div>
                     <div className="flex justify-between text-sm mb-2">
                       <span>
-                        Raised: {program.currency} {program.amount_raised}
+                        Raised: {program?.currency} {program?.amount_raised}
                       </span>
-                      <span>{program.percentage_funded.toFixed(2)}%</span>
+                      <span>{program?.percentage_funded.toFixed(2)}%</span>
                     </div>
                     <Progress
-                      value={program.percentage_funded}
+                      value={program?.percentage_funded}
                       className="h-3"
                     />
                     <div className="text-sm text-muted-foreground mt-2">
-                      Goal: {program.currency} {program.target_amount}
+                      Goal: {program?.currency} {program?.target_amount}
                     </div>
                   </div>
                   <Separator />
-                  {program.donation_reason && (<div>
+                  {program?.donation_reason && (<div>
                     <CardTitle> Reason for Donation Continuation</CardTitle>
                   
-                    <span className='text-sm'>{program.donation_reason}</span>
+                    <span className='text-sm'>{program?.donation_reason}</span>
                   </div>)}
                   
                 </CardContent>
               </Card>
 
               {/* Donation Form */}
-              {program.receiving_donation && (       <Card>
+              {program?.receiving_donation && (       <Card>
                 <CardHeader>
                   <CardTitle>Support This Program</CardTitle>
                 </CardHeader>
@@ -313,7 +319,7 @@ useEffect(() => {
                     <div>
                       <div className="font-medium">Location</div>
                       <div className="text-sm text-muted-foreground">
-                        {program.location}
+                        {program?.location}
                       </div>
                     </div>
                   </div>
@@ -323,7 +329,7 @@ useEffect(() => {
                     <div>
                       <div className="font-medium">End Date</div>
                       <div className="text-sm text-muted-foreground">
-                        {program.deadline}
+                        {program?.deadline}
                       </div>
                     </div>
                   </div>
@@ -333,7 +339,7 @@ useEffect(() => {
                     <div>
                       <div className="font-medium">Category</div>
                       <div className="text-sm text-muted-foreground">
-                        {program.category}
+                        {program?.category}
                       </div>
                     </div>
                   </div>
