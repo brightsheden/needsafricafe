@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
-import { error } from 'console';
 import { formatCurrency } from '@/lib/utils';
 
 const ProgramDetails = () => {

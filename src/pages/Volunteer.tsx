@@ -76,7 +76,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     console.log(captchaValue)
 
-    //navigate("/volunteer/thank-you");
+    navigate("/volunteer/thank-you");
   } catch (error) {
     console.error("Submission failed:", error);
     
