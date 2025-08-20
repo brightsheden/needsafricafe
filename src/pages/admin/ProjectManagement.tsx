@@ -19,9 +19,10 @@ import {
   Target,
   Calendar,
   MapPin,
-  DollarSign
+  DollarSign,
+  Pencil
 } from 'lucide-react';
-import { useCreateProject, useDeleteProject, useProjects, useUpdateProject } from '@/api/projects';
+import { useCreateProject, useDeleteProject, useProjects, useProjectStats, useUpdateProject } from '@/api/projects';
 import { API_URL } from "../../../config";
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -65,11 +66,15 @@ const ProjectManagement = () => {
   // Filter projects
 
   // Stats calculations
-  const totalProjects = projects?.total || 0;
-  const activeProjects = projects?.data?.filter(project => project.status === 'active').length || 0;
-  const completedProjects = projects?.data?.filter(project => project.status === 'completed').length || 0;
+  const {data:stats, isPending:PendingStats, isError:IsStatError } = useProjectStats()
+  const totalProjects = stats?.total
+  const activeProjects = stats?.active
+  const completedProjects = stats?.completed
+  const draftProjects = stats?.draft
   const totalPages = projects?.total_pages || 1;
 
+ 
+ 
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active':
@@ -206,6 +211,21 @@ const ProjectManagement = () => {
             </div>
           </CardContent>
         </Card>
+
+           <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="bg-primary/10 p-3 rounded-full">
+                <Pencil className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Drafts Projects</p>
+                <p className="text-2xl font-bold">{draftProjects}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
 
         <Card>
           <CardContent className="p-6">
