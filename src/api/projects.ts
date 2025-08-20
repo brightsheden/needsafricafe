@@ -166,3 +166,10 @@ export const useDeleteProjectPhoto = () => {
     },
   });
 };
+
+// Get Project Stats
+export const useProjectStats = () =>
+  useQuery({
+    queryKey: ['project_stats'],
+    queryFn: () => api.get('/api/project/project_stats/').then(res => res.data),
+  });

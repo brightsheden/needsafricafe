@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import { useDonations } from '@/api/donation';
 import { Link } from 'react-router-dom';
 import AdminLayout from "./AdminLayout";
+import { useExchangeRate, useUpdateExchangeRate } from '@/api/donation';
 
 const DonationManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,6 +21,15 @@ const DonationManagement = () => {
   const [paymentMethodFilter, setPaymentMethodFilter] = useState('all');
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const [usdRate, setUsdRate] =  useState("")
+
+  const {data:rate, isError:IsErrorRate, isPending:LoadingRate, isSuccess:SuccessRate} =  useExchangeRate()
+  const {mutate:updateRate, isError:IsErrorUpdateRate, isPending:PendingUpdateRate, isSuccess:SuccessUpdateRate} = useUpdateExchangeRate()
+  const handleUpdate = (e:any)=>{
+    e.preventDefault()
+    const data ={"USD":usdRate}
+    updateRate(data)
+  }
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -88,6 +98,47 @@ const DonationManagement = () => {
           Export CSV
         </Button>
       </div>
+
+             <Card>
+        <CardHeader>
+          <CardTitle>Exchange Rate</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {LoadingRate ? (
+            <div>Loading exchange rate...</div>
+          ) : rate?.data ? (
+            <div className="mb-4">
+              <div className="flex gap-6">
+                <div>
+                  <span className="font-semibold">USD:</span> {Number(rate.data.USD).toLocaleString()} 
+                </div>
+                <div>
+                  <span className="font-semibold">NGN:</span> {Number(rate.data.NGN).toLocaleString()} 
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>No exchange rate data available.</div>
+          )}
+          <form className="flex gap-2 items-end" onSubmit={handleUpdate}>
+            <div>
+              <Label htmlFor="usdRate">Update USD Rate</Label>
+              <Input
+                id="usdRate"
+                type="number"
+                step="0.01"
+                value={usdRate}
+                onChange={e => setUsdRate(e.target.value)}
+                placeholder="Enter new USD rate"
+                min="0"
+              />
+            </div>
+            <Button type="submit" disabled={PendingUpdateRate || !usdRate}>
+              {PendingUpdateRate ? 'Updating...' : 'Update'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">Filters & Search</CardTitle>
@@ -206,6 +257,7 @@ const DonationManagement = () => {
           )}
         </CardContent>
       </Card>
+    
     </div>
 
     </AdminLayout>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import ReCAPTCHA from "react-google-recaptcha";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,8 +11,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { MapPin, Phone, Mail } from 'lucide-react';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { useSubmitVolunteer } from '@/api/volunteer';
+import { useToast } from '@/hooks/use-toast';
+import { CAPTCHA_KEY, API_URL } from '../../config';
 
 const Volunteer = () => {
+  console.log(CAPTCHA_KEY, "keyys")
+  console.log(API_URL)
   const submitVolunteerMutation = useSubmitVolunteer();
   const [formData, setFormData] = useState({
     first_name: '',
@@ -24,12 +29,16 @@ const Volunteer = () => {
     days: '',
     cv: null as File | null,
   });
-
+  const {toast} = useToast()
   const heroRef = useScrollAnimation();
   const formRef = useScrollAnimation();
   const infoRef = useScrollAnimation();
   const faqRef = useScrollAnimation();
   const navigate = useNavigate();
+  const [captchaValue, setCaptchaValue] = useState(null);
+  
+
+console.log(import.meta.env);
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -38,11 +47,21 @@ const handleSubmit = async (e: React.FormEvent) => {
     // Prepare payload for mutation hook
     const { cv, ...form } = formData;
 
+    if(!captchaValue){
+          toast({
+        title: 'Error',
+        description: 'Please complete the captcha',
+        duration: 4000,
+        type: 'error',
+      });
+      return
+    }
+
     await submitVolunteerMutation.mutateAsync({ form, cv });
 
     console.log('Volunteer form submitted:', formData);
 
-    // Reset form only after successful submission
+  
     setFormData({
       first_name: '',
       last_name: '',
@@ -55,16 +74,34 @@ const handleSubmit = async (e: React.FormEvent) => {
       cv: null,
     });
 
+    console.log(captchaValue)
+
     navigate("/volunteer/thank-you");
   } catch (error) {
     console.error("Submission failed:", error);
-    // Optionally show an error message here
+    
   }
 };
+
 
   const handleChange = (field: string, value: string | File | null) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  
+
+  const handleCaptcha = (e)=>{
+    e.preventDefault()
+    if(!captchaValue){
+          toast({
+        title: 'Error',
+        description: 'Please complete the captcha',
+        duration: 4000,
+        type: 'error',
+      });
+
+    }
+  }
 
   const faqs = [
     {
@@ -232,6 +269,10 @@ const handleSubmit = async (e: React.FormEvent) => {
                       onChange={(e) => handleChange('cv', e.target.files ? e.target.files[0] : null)}
                     />
                   </div>
+                    <ReCAPTCHA
+                        sitekey={CAPTCHA_KEY}
+                        onChange={handleCaptcha}
+                      />
 
                   <Button type="submit" size="lg" className="w-full">
                     Submit Application

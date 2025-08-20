@@ -9,9 +9,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  define: {
-    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
-  },
+  // define: {
+  //   'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
+  // },
   plugins: [
     react(),
     

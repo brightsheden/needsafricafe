@@ -70,3 +70,23 @@ export const useExecutePaypalPayment = () => {
     },
   });
 };
+
+export const useExchangeRate = () => {
+  return useQuery({
+    queryKey: ['exchange_rate'],
+    queryFn: () => api.get('/api/donation/exchange_rate').then(res => res.data),
+  });
+};
+
+export const useUpdateExchangeRate = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data) => {
+      const response = await api.post('/api/donation/exchange_rate/update', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['exchange_rate']);
+    },
+  });
+};
