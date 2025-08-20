@@ -19,12 +19,13 @@ import {
 } from 'lucide-react';
 import { useProject } from '@/api/projects';
 import { API_URL } from '../../config';
-import { formatCurrency } from '@/lib/utils';
+import { error } from 'console';
+import { formatCurrency, capitalize } from '@/lib/utils';
 
 const ProgramDetails = () => {
   const { id } = useParams();
   const projectId = Number(id);
-  const { data, isPending, isError,error } = useProject(projectId);
+  const { data, isPending, isError, error } = useProject(projectId);
   const program = data?.data;
 
   const photos = program?.photos?.filter((p) => p.image) || [];
@@ -33,32 +34,75 @@ const ProgramDetails = () => {
   const [mainDate, setMainDate] = useState('');
   const [animateMainImage, setAnimateMainImage] = useState(false);
 
-useEffect(() => {
-  if (photos.length > 0 && !mainImage) {
-    setMainImage(photos[0].image);
-    setMainName(photos[0].name);
-    setMainDate(photos[0].deliver_date);
-  }
-}, [photos, mainImage]);
+  // share status: 'idle' | 'sharing' | 'shared' | 'copied' | 'failed'
+  const [shareStatus, setShareStatus] = useState('idle');
+
+  useEffect(() => {
+    if (photos.length > 0 && !mainImage) {
+      setMainImage(photos[0].image);
+      setMainName(photos[0].name);
+      setMainDate(photos[0].deliver_date);
+    }
+  }, [photos, mainImage]);
+
+  const handleShare = async () => {
+    const shareUrl = window.location.href;
+    const shareData = {
+      title: program?.title ?? 'Program',
+      text: program?.summary ?? '',
+      url: shareUrl,
+    };
+
+    setShareStatus('sharing');
+
+    try {
+      if (navigator.share) {
+        // Native share
+        await navigator.share(shareData);
+        setShareStatus('shared');
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        // Copy to clipboard (modern)
+        await navigator.clipboard.writeText(shareUrl);
+        setShareStatus('copied');
+      } else {
+        // Legacy fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = shareUrl;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        setShareStatus(successful ? 'copied' : 'failed');
+      }
+    } catch (err) {
+      console.error('Share failed:', err);
+      setShareStatus('failed');
+    } finally {
+      // reset after a short delay so the UI message disappears
+      setTimeout(() => setShareStatus('idle'), 3000);
+    }
+  };
 
   if (isPending) {
     return (
       <div className=" flex items-center justify-center">
-         <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
         </div>
       </div>
     );
   }
 
-  if(isError){
-    return (<div className="min-h-screen flex items-center justify-center">
-         <div className="flex items-center justify-center">
-        <div className='card '>{error.message}</div>
+  if (isError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex items-center justify-center">
+          <div className="card ">{error?.message || 'An error occurred'}</div>
         </div>
-      </div>)
-
-
+      </div>
+    );
   }
 
   return (
@@ -129,17 +173,15 @@ useEffect(() => {
                 </p>
 
                 {/* Key Metrics */}
-
-                <div className=''>
-                
-                <div  className='flex flex-col md:flex-row justify-between gap-4'>
-                            <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
-                    <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
-                    <Target className='size-8'/>
-                  {program?.impact_phrase}
-                  </p>
-                  <span className='text-muted-foreground'>Direct impact </span>
-                  </div>
+                <div className="">
+                  <div className="flex flex-col md:flex-row justify-between gap-4">
+                    <div className="p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md">
+                      <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
+                        <Target className="size-8" />
+                        {program?.impact_phrase}
+                      </p>
+                      <span className="text-muted-foreground">Direct impact </span>
+                    </div>
 
                    <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
                     <p className="text-2xl font-bold text-primary leading-relaxed  flex justify-between flex-col items-center">
@@ -149,48 +191,58 @@ useEffect(() => {
                   <span className='text-muted-foreground'>Total budget </span>
                   </div>
 
-
-                  <div className='p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md'>
-                    <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
-                    <Users className='size-8'/>
-                   {program?.beneficiary_count}
-                  </p>
-                  <span className='text-muted-foreground'>Total beneficiaries </span>
-                  </div>
-
-
-
-                </div>
-        
-                </div>
-            
-              </div>
-
- <Separator />
-                          {/* Achievements */}
-            {program?.milestones?.length > 0 && (
-              <div className="transition-all duration-1000 delay-500">
-                <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
-                <div className="space-y-4">
-                  {program?.milestones.map((achievement, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-                      <span className="text-muted-foreground">{achievement}</span>
+                    <div className="p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md">
+                      <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
+                        <Users className="size-8" />
+                        {program?.beneficiary_count}
+                      </p>
+                      <span className="text-muted-foreground">Total beneficiaries </span>
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
-            )}
 
+              <Separator />
 
-                  {/* Proof of Delivery Section */}
-               <Separator />
+              {/* Program Goals */}
+              {program?.goals?.length > 0 && (
+                <div className="transition-all duration-1000 delay-400">
+                  <h3 className="text-2xl font-bold font-heading mb-6">Program Goals</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {program.goals.map((goal, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-4 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-muted-foreground">{goal}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Achievements */}
+              {program?.milestones?.length > 0 && (
+                <div className="transition-all duration-1000 delay-500">
+                  <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
+                  <div className="space-y-4">
+                    {program.milestones.map((achievement, index) => (
+                      <div key={index} className="flex items-start space-x-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <span className="text-muted-foreground">{achievement}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <Separator />
+
+              {/* Proof of Delivery Section */}
               {photos?.length > 0 && (
                 <div>
-                    <h4 className="text-2xl font-bold font-heading mb-6">Proof of delivery</h4>
+                  <h4 className="text-2xl font-bold font-heading mb-6">Proof of delivery</h4>
                   <div className="space-y-4">
                     {/* Main Image */}
-                  {mainImage && (
+                    {mainImage && (
                       <img
                         src={`${API_URL}${mainImage}`}
                         alt="Proof of Delivery"
@@ -206,9 +258,7 @@ useEffect(() => {
                       </p>
                       <p className="text-sm text-gray-500">
                         Date of Delivery:{' '}
-                        {mainDate
-                          ? new Date(mainDate).toLocaleDateString()
-                          : 'N/A'}
+                        {mainDate ? new Date(mainDate).toLocaleDateString() : 'N/A'}
                       </p>
                     </div>
 
@@ -220,53 +270,21 @@ useEffect(() => {
                           src={`${API_URL}${photo.image}`}
                           alt={`Thumbnail ${idx + 1}`}
                           className={`h-20 w-20 object-cover rounded-lg cursor-pointer border-2 transition ${
-                            mainImage === photo.image
-                              ? 'border-primary'
-                              : 'border-transparent'
+                            mainImage === photo.image ? 'border-primary' : 'border-transparent'
                           }`}
-                     onClick={() => {
-                              setAnimateMainImage(true);
-                              setMainImage(photo.image);
-                              setMainName(photo.name);
-                              setMainDate(photo.deliver_date);
-                              setTimeout(() => setAnimateMainImage(false), 300); 
-                            }}
+                          onClick={() => {
+                            setAnimateMainImage(true);
+                            setMainImage(photo.image);
+                            setMainName(photo.name);
+                            setMainDate(photo.deliver_date);
+                            setTimeout(() => setAnimateMainImage(false), 300);
+                          }}
                         />
                       ))}
                     </div>
                   </div>
                 </div>
               )}
-
-
-              {/* Program Goals */}
-              {program.goals?.length > 0 && ( <div className="transition-all duration-1000 delay-400">
-                <h3 className="text-2xl font-bold font-heading mb-6">Program Goals</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {program.goals.map((goal, index) => (
-                    <div key={index} className="flex items-start space-x-3 p-4 bg-muted/30 rounded-lg">
-                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-muted-foreground">{goal}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              )}
-
-                          {/* Achievements */}
-            {program.milestones?.length > 0 && (
-              <div className="transition-all duration-1000 delay-500">
-                <h3 className="text-2xl font-bold font-heading mb-6">Key Achievements</h3>
-                <div className="space-y-4">
-                  {program.milestones.map((achievement, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-                      <span className="text-muted-foreground">{achievement}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
               {/* Share Section */}
               <div className="pt-8 border-t">
@@ -277,10 +295,28 @@ useEffect(() => {
                       Help us spread awareness about this important work
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
-                    <Share2 className="h-4 w-4 mr-2" />
-                    Share
-                  </Button>
+
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleShare}
+                      disabled={!program}
+                      aria-disabled={!program}
+                      aria-label="Share this program"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share
+                    </Button>
+
+                    {/* ephemeral feedback */}
+                    <div aria-live="polite" className="min-w-[120px] text-sm">
+                      {shareStatus === 'sharing' && <span className="text-muted-foreground">Sharing…</span>}
+                      {shareStatus === 'shared' && <span className="text-green-600">Shared — thanks!</span>}
+                      {shareStatus === 'copied' && <span className="text-green-600">Link copied</span>}
+                      {shareStatus === 'failed' && <span className="text-red-600">Share failed</span>}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -293,9 +329,7 @@ useEffect(() => {
                   <CardTitle className="flex items-center justify-between">
                     Funding Progress
                     <Badge
-                      variant={
-                        program?.status === 'Active' ? 'default' : 'secondary'
-                      }
+                      variant={program?.status === 'Active' ? 'default' : 'secondary'}
                     >
                       {program?.status}
                     </Badge>
@@ -307,7 +341,7 @@ useEffect(() => {
                       <span>
                         Raised: {program?.currency} {formatCurrency(program?.amount_raised)}
                       </span>
-                      <span>{program?.percentage_funded.toFixed(2)}%</span>
+                      <span>{program?.percentage_funded?.toFixed(2)}%</span>
                     </div>
                     <Progress
                       value={program?.percentage_funded}
@@ -318,26 +352,27 @@ useEffect(() => {
                     </div>
                   </div>
                   <Separator />
-                  {program?.donation_reason && (<div>
-                    <CardTitle> Reason for Donation Continuation</CardTitle>
-                  
-                    <span className='text-sm'>{program?.donation_reason}</span>
-                  </div>)}
-                  
+                  {program?.donation_reason && (
+                    <div>
+                      <CardTitle> Reason for Donation Continuation</CardTitle>
+                      <span className="text-sm">{program?.donation_reason}</span>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
               {/* Donation Form */}
-              {program?.receiving_donation && (       <Card>
-                <CardHeader>
-                  <CardTitle>Support This Program</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <DonationForm projectId={projectId} />
-                </CardContent>
-              </Card>
-)}
-       
+              {program?.receiving_donation && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Support This Program</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <DonationForm projectId={projectId} />
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Program Info */}
               <Card>
                 <CardHeader>
@@ -369,7 +404,7 @@ useEffect(() => {
                     <div>
                       <div className="font-medium">Category</div>
                       <div className="text-sm text-muted-foreground">
-                        {program?.category}
+                        {capitalize(program?.category)}
                       </div>
                     </div>
                   </div>
