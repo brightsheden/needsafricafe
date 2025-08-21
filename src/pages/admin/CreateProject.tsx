@@ -26,7 +26,7 @@ const CreateProject = () => {
           currency: formData.projectForm.currency || 'USD',
           deadline: formData.projectForm.endDate || null,
           status: formData.projectForm.status || 'draft',
-          receiving_donation:  formData.projectForm.receiving_donation || false ,
+          receiving_donation:  formData.projectForm.receiving_donation || true ,
           donation_reason: formData.projectForm.donation_reason || "",
            // Impact fields
           impact_phrase: formData.projectForm.impact_phrase || '',

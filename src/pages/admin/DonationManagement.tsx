@@ -12,6 +12,7 @@ import { useDonations } from '@/api/donation';
 import { Link } from 'react-router-dom';
 import AdminLayout from "./AdminLayout";
 import { useExchangeRate, useUpdateExchangeRate } from '@/api/donation';
+import { formatCurrency, capitalize } from '@/lib/utils';
 
 const DonationManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,7 +28,7 @@ const DonationManagement = () => {
   const {mutate:updateRate, isError:IsErrorUpdateRate, isPending:PendingUpdateRate, isSuccess:SuccessUpdateRate} = useUpdateExchangeRate()
   const handleUpdate = (e:any)=>{
     e.preventDefault()
-    const data ={"USD":usdRate}
+    const data ={"usd_to_ngn_rate":usdRate}
     updateRate(data)
   }
 
@@ -110,10 +111,10 @@ const DonationManagement = () => {
             <div className="mb-4">
               <div className="flex gap-6">
                 <div>
-                  <span className="font-semibold">USD:</span> {Number(rate.data.USD).toLocaleString()} 
+                  <span className="font-semibold">USD:</span> {rate.data.usd_to_ngn_rate}
                 </div>
                 <div>
-                  <span className="font-semibold">NGN:</span> {Number(rate.data.NGN).toLocaleString()} 
+                  <span className="font-semibold">NGN:</span> {rate.data.ngn_to_usd_rate}
                 </div>
               </div>
             </div>
@@ -210,25 +211,40 @@ const DonationManagement = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Donor Name</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Amount</TableHead>
+                <TableHead>Project Title</TableHead>
+                <TableHead>Amount Paid</TableHead>
+                <TableHead>Converted Amount</TableHead>
                 <TableHead>Frequency</TableHead>
                 <TableHead>Payment Method</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>Previous Amount Raised</TableHead>
+                <TableHead>Current Amount Raised</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {donations.map((donation) => (
                 <TableRow key={donation.id}>
+                  <TableCell>{format(new Date(donation.created_at), 'MMM dd, yyyy')}</TableCell>
                   <TableCell className="font-medium">{donation.donor_full_name}</TableCell>
                   <TableCell>{donation.donor_email}</TableCell>
-                  <TableCell>{donation?.currency} {donation.amount.toLocaleString()}</TableCell>
+                  <TableCell>
+                              {donation.project_title
+                                ? donation.project_title.length > 40
+                                  ? donation.project_title.slice(0, 37) + '...'
+                                  : donation.project_title
+                                : 'General'}
+                   </TableCell>
+                  <TableCell>{donation.currency} {formatCurrency(donation.amount.toLocaleString())}</TableCell>
+                  <TableCell>{donation.project_currency} {formatCurrency(donation.project_currency_amount?.toLocaleString())}</TableCell>
                   <TableCell>{donation.frequency}</TableCell>
                   <TableCell>{donation.payment_client}</TableCell>
                   <TableCell>{getStatusBadge(donation.status)}</TableCell>
-                  <TableCell>{format(new Date(donation.created_at), 'MMM dd, yyyy')}</TableCell>
+                  <TableCell>{donation.project_currency} {formatCurrency(donation.previous_amount_raised)}</TableCell>
+                  <TableCell>{donation.project_currency} {formatCurrency(donation.current_amount_raised)}</TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
