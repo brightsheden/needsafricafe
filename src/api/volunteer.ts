@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from './utils';
 
 export const useSubmitVolunteer = () => {
@@ -32,6 +32,36 @@ export const useSubmitVolunteer = () => {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then(res => res.data);
+    },
+  });
+};
+
+export const useVolunteers = ({
+  search = '',
+  country = '',
+  role = '',
+  availability = '',
+  status,
+  page = 1,
+  page_size = 10,
+} = {}) =>
+  useQuery({
+    queryKey: ['volunteers', { search, country, role, availability, status, page, page_size }],
+    queryFn: () =>
+      api
+        .get('/api/volunteer/', {
+          params: { search, country, role, availability, status, page, page_size },
+        })
+        .then(res => res.data),
+  });
+
+
+export const useDeleteVolunteer = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/api/volunteer/${id}`).then(res => res.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['volunteers'] });
     },
   });
 };

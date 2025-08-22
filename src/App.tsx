@@ -15,6 +15,8 @@ import Donate from "./pages/Donate";
 import Contact from "./pages/Contact";
 import DonationManagement from "./pages/admin/DonationManagement";
 import ProjectManagement from "./pages/admin/ProjectManagement";
+import SubscriptionManagement from "./pages/admin/SubscriptionManagement";
+import VolunteerManagement from "./pages/admin/VolunteerManagement";
 import TeamManagement from "./pages/admin/TeamManagement";
 import NotFound from "./pages/NotFound";
 import Projects from "./pages/Programs";
@@ -59,6 +61,8 @@ const AppContent = () => {
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/donations" element={<DonationManagement />} />
           <Route path="/admin/projects" element={<ProjectManagement />} />
+          <Route path="/admin/subscriptions" element={<SubscriptionManagement />} />
+          <Route path="/admin/volunteers" element={<VolunteerManagement />} />
           <Route path="/admin/projects/create" element={<CreateProject />} />
           <Route path="/admin/projects/:id/edit" element={<ProjectEdit />} />
           <Route path="/admin/auth" element={<NGOAdminSignup />} />

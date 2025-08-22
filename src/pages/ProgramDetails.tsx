@@ -15,6 +15,7 @@ import {
   Share2,
   User,
   Users,
+  Download,
   CheckCircle
 } from 'lucide-react';
 import { useProject } from '@/api/projects';
@@ -132,7 +133,7 @@ const ProgramDetails = () => {
               variant="secondary"
               className="mx-4 mb-4 bg-white/20 text-white border-white/30"
             >
-              {program?.category}
+              {capitalize(program?.category)}
             </Badge>
 
             <h1 className="text-4xl md:text-5xl font-bold font-heading mb-4">
@@ -333,7 +334,10 @@ const ProgramDetails = () => {
                     >
                       {program?.status}
                     </Badge>
+
+
                   </CardTitle>
+
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
@@ -351,7 +355,20 @@ const ProgramDetails = () => {
                       Goal: {program?.currency} {formatCurrency(program?.target_amount)}
                     </div>
                   </div>
+                        <div className="space-y-2">
+                          <a
+                            href={`${API_URL}/api/project/${projectId}/download_report`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Button variant="outline" className="w-full">
+                              <Download className="h-4 w-4 mr-2" />
+                              Download Report
+                            </Button>
+                          </a>
+                        </div>
                   <Separator />
+
                   {program?.donation_reason && (
                     <div>
                       <CardTitle> Reason for Donation Continuation</CardTitle>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import DonationForm from '@/components/Shared/DonationForm';
@@ -11,6 +11,16 @@ import educationImage from '@/assets/class.jpg';
 import healthcareImage from '@/assets/health.jpg';
 import environmentImage from '@/assets/comm.jpg';
 import { Link } from 'react-router-dom';
+import Logo from '@/assets/logo.png';
+import { useCreateSubscription } from '@/api/subscription';
+import { useToast } from '@/hooks/use-toast';
+import ReCAPTCHA from "react-google-recaptcha";
+import { CAPTCHA_KEY, API_URL } from '../../config';
+
+import { Input } from '@/components/ui/input';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
 const Homepage = () => {
   // Scroll animations for each section
@@ -19,6 +29,58 @@ const Homepage = () => {
   const newsletterSection = useScrollAnimation();
   const ctaSection = useScrollAnimation();
 
+  const { toast } = useToast();
+  const createSubscription = useCreateSubscription();
+  const [email, setEmail] = useState('');
+  const [inlineError, setInlineError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setInlineError(null);
+
+    // client-side validation
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setInlineError('Please enter your email address.');
+      toast({ title: 'Error', description: 'Please enter your email address.', type: 'error' });
+      return;
+    }
+    if (!emailRegex.test(trimmed)) {
+      setInlineError('Please enter a valid email address.');
+      toast({ title: 'Invalid email', description: 'Enter a valid email address.', type: 'error' });
+      return;
+    }
+    if (!captchaToken) {
+      setInlineError('Please complete the captcha.');
+      toast({ title: 'Captcha required', description: 'Please complete the captcha.', type: 'error' });
+      return;
+    }
+    try {
+      await createSubscription.mutateAsync({ email: trimmed });
+      toast({ title: 'Subscribed', description: 'Thanks — you have been subscribed!', type: 'success' });
+      setEmail('');
+      setCaptchaToken(null);
+
+    } catch (err: any) {
+      // try to read message from backend error shape
+      const serverMessage =
+        err?.response?.data?.message || err?.message || 'Subscription failed';
+
+      // handle already exists specifically
+      if (typeof serverMessage === 'string' && serverMessage.toLowerCase().includes('exists')) {
+        setInlineError('This email is already subscribed.');
+        toast({ title: 'Already subscribed', description: 'This email already exists.', type: 'error' });
+      } else if (typeof serverMessage === 'string' && serverMessage.toLowerCase().includes('invalid')) {
+        setInlineError('Invalid email address.');
+        toast({ title: 'Invalid email', description: serverMessage, type: 'error' });
+      } else {
+        setInlineError('Could not subscribe. Please try again later.');
+        toast({ title: 'Error', description: serverMessage, type: 'error' });
+      }
+      console.error('Subscribe error:', err);
+    }
+  };
 
   const featuredPrograms = [
     {
@@ -174,6 +236,7 @@ const Homepage = () => {
                 ? 'opacity-100 transform translate-x-0' 
                 : 'opacity-0 transform translate-x-8'
             }`} style={{ transitionDelay: '300ms' }}>
+
               <Card className="shadow-medium">
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-bold mb-4">Join Our Community</h3>
@@ -181,14 +244,28 @@ const Homepage = () => {
                     Subscribe to our newsletter and be part of the change.
                   </p>
                   <div className="space-y-4">
-                    <input
-                      type="email"
-                      placeholder="Enter your email address"
-                      className="w-full px-4 py-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
+
+                  <form onSubmit={handleSubmit} className="space-y-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+              className="w-full px-4 py-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-label="newsletter-email"
+              />
+              {inlineError && <p className="text-sm text-red-400">{inlineError}</p>}
+        <div className="mt-2">
+          <ReCAPTCHA
+            sitekey={CAPTCHA_KEY}
+            onChange={(token) => setCaptchaToken(token)}
+            onExpired={() => setCaptchaToken(null)}
+          />
+        </div>
                     <Button variant="default" size="lg" className="w-full">
                       Subscribe Now
                     </Button>
+                    </form>
                   </div>
                 </CardContent>
               </Card>

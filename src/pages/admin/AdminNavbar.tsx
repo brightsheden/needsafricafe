@@ -23,6 +23,8 @@ const AdminNavbar = () => {
         <div className="hidden md:flex items-center gap-6">
           <Link to="/admin/projects" className="hover:underline">Projects</Link>
           <Link to="/admin/donations" className="hover:underline">Donations</Link>
+          <Link to="/admin/subscriptions" className="hover:underline">Subscriptions</Link>
+          <Link to="/admin/volunteers" className="hover:underline">Volunteers</Link>
           {/* <Link to="/admin/team" className="hover:underline">Team</Link> */}
         </div>
       </div>

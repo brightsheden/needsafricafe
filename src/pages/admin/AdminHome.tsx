@@ -18,6 +18,18 @@ const adminPages = [
     path: "/admin/donations",
     icon: <HandCoins className="h-8 w-8 text-primary" />
   },
+  {
+    label: "Subscription Management",
+    description: "Monitor and manage all subscriptions.",
+    path: "/admin/subscriptions",
+    icon: <HandCoins className="h-8 w-8 text-primary" />
+  },
+  {
+    label: "Volunteer Management",
+    description: "Monitor and manage all volunteers.",
+    path: "/admin/volunteers",
+    icon: <HandCoins className="h-8 w-8 text-primary" />
+  },
   // {
   //   label: "Team Management",
   //   description: "Manage team members and permissions.",

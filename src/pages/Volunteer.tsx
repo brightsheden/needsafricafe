@@ -15,8 +15,6 @@ import { useToast } from '@/hooks/use-toast';
 import { CAPTCHA_KEY, API_URL } from '../../config';
 
 const Volunteer = () => {
-  console.log(CAPTCHA_KEY, "keyys")
-  console.log(API_URL)
   const submitVolunteerMutation = useSubmitVolunteer();
   const [formData, setFormData] = useState({
     first_name: '',
@@ -46,6 +44,8 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     // Prepare payload for mutation hook
     const { cv, ...form } = formData;
+    console.log(captchaValue)
+    console.log(CAPTCHA_KEY)
 
     if(!captchaValue){
           toast({
@@ -74,7 +74,6 @@ const handleSubmit = async (e: React.FormEvent) => {
       cv: null,
     });
 
-    console.log(captchaValue)
 
     navigate("/volunteer/thank-you");
   } catch (error) {
@@ -90,18 +89,18 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   
 
-  const handleCaptcha = (e)=>{
-    e.preventDefault()
-    if(!captchaValue){
-          toast({
-        title: 'Error',
-        description: 'Please complete the captcha',
-        duration: 4000,
-        type: 'error',
-      });
-
-    }
+const handleCaptcha = (token: string | null) => {
+  // token is a string when solved, null when expired/reset
+  setCaptchaValue(token);
+  if (!token) {
+    toast({
+      title: 'Captcha',
+      description: 'Captcha expired or not completed.',
+      duration: 3000,
+      type: 'error',
+    });
   }
+};
 
   const faqs = [
     {
@@ -270,10 +269,10 @@ const handleSubmit = async (e: React.FormEvent) => {
                     />
                   </div>
                     <ReCAPTCHA
-                        sitekey={CAPTCHA_KEY}
-                        onChange={handleCaptcha}
-                      />
-
+                  sitekey={CAPTCHA_KEY}
+                  onChange={handleCaptcha}
+                  onExpired={() => setCaptchaValue(null)}
+                />
                   <Button type="submit" size="lg" className="w-full">
                     Submit Application
                   </Button>
