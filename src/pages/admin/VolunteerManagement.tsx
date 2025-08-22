@@ -169,6 +169,8 @@ const VolunteerManagement: React.FC = () => {
                   <TableHead>Country</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Availability</TableHead>
+                  <TableHead>Hours</TableHead>
+                  <TableHead>Days</TableHead>
                   <TableHead>CV</TableHead>
                   <TableHead>Applied At</TableHead>
                   <TableHead>Actions</TableHead>
@@ -191,6 +193,12 @@ const VolunteerManagement: React.FC = () => {
                       {v.availability ? (
                         <Badge className="bg-blue-100 text-blue-800">{v.availability}</Badge>
                       ) : '-'}
+                    </TableCell>
+                    <TableCell>
+                      {v.hours ?? '-'}
+                    </TableCell>
+                     <TableCell>
+                      {v.days ?? '-'}
                     </TableCell>
                     <TableCell>
                       {v.cv ? (
