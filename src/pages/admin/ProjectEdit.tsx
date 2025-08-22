@@ -35,6 +35,7 @@ const ProjectEdit = () => {
           impact_count: formData.projectForm.impact_count ?? 0,
           milestones: formData.milestones ?? [],
           goals: formData.goals ?? [],
+          donation_supports: formData.achievements ?? []
         },
 
         cover_photo: formData.coverPhoto || null,

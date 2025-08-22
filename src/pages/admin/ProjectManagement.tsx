@@ -107,7 +107,6 @@ const ProjectManagement = () => {
 
     try {
       if (editingProject) {
-        // You can add update logic here if you have an update endpoint
         setShowCreateModal(false);
         setEditingProject(null);
         setProjectForm({

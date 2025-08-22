@@ -194,7 +194,7 @@ const ProgramDetails = () => {
                     <div className="p-2 border shadow-md flex flex-col items-center justify-center w-full rounded-md">
                       <p className="text-2xl font-bold text-primary leading-relaxed flex justify-between flex-col items-center">
                         <Users className="size-8" />
-                        {program?.beneficiary_count}
+                        { formatCurrency(program?.beneficiary_count)}
                       </p>
                       <span className="text-muted-foreground">Total beneficiaries </span>
                     </div>

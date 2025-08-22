@@ -34,7 +34,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     beneficiary_count: initialValues?.beneficiary_count ?? null,
     impact_count: initialValues?.impact_count ?? null,
     milestones: initialValues?.milestones ?? [],
-    goals: initialValues?.goals ?? []
+    goals: initialValues?.goals ?? [],
+    achievements:initialValues?.donation_supports ?? []
 
   });
 
@@ -45,7 +46,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
   const [goalInput, setGoalInput] = useState('');
   const [milestones, setMilestones] = useState<string[]>(initialValues?.milestones || []);
   const [goals, setGoals] = useState<string[]>(initialValues?.goals || []);
+  const [achievements, setAchievements] = useState<string[]>(initialValues?.donation_supports || [])
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
+  const [achievementInput, setAchievementInput] = useState('')
   const [mediaFilesPreview, setMediaFilesPreview] = useState<string[]>([]);
 
   useEffect(() => {
@@ -80,6 +83,17 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
     }
   };
 
+  const handleAddAchievementGoal = ()=>{
+    if(achievementInput.trim()){
+      setAchievements([...achievements, achievementInput.trim()])
+      setAchievementInput('')
+    }
+  }
+
+  const handleRemoveAchievement = (idx:number)=>{
+    setAchievements(achievements.filter((_,i)=> i !== idx))
+  }
+
   const handleRemoveMilestone = (idx: number) => {
     setMilestones(milestones.filter((_, i) => i !== idx));
   };
@@ -96,6 +110,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
       currency,
       milestones,
       goals,
+      achievements
     });
   };
 
@@ -235,6 +250,30 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialValues, onSubmit, isPe
           </div>
         </div>
 
+      
+        <div>
+          <Label>Donation Supports</Label>
+          <div className="flex gap-2 mb-2">
+            <Input
+              value={achievementInput}
+              onChange={e => setAchievementInput(e.target.value)}
+              placeholder="Enter donation supports"
+            />
+            <Button type="button" onClick={handleAddAchievementGoal}>
+              Add
+            </Button>
+          </div>
+          <div className="mt-2 list-disc pl-5">
+            {achievements?.map((ach, idx) => (
+                <li key={idx} className="flex items-center justify-between">
+                <span>{ach}</span>
+                <Button type="button" size="sm" variant="ghost" onClick={() => handleRemoveAchievement(idx)}>
+                  Remove
+                </Button>
+              </li>
+            ))}
+          </div>
+        </div>
         {/* Impact Record */}
 <div className="border p-4 rounded-md">
   <h3 className="font-semibold mb-2">Impact Record</h3>

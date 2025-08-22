@@ -32,7 +32,8 @@ const CreateProject = () => {
           impact_phrase: formData.projectForm.impact_phrase || '',
           beneficiary_count: formData.projectForm.beneficiary_count ?? 0,
          milestones: formData.milestones ?? [],
-         goals: formData.goals ?? []
+         goals: formData.goals ?? [],
+         donation_supports: formData.achievements ?? []
 
           // impact_count: formData.projectForm.impact_count ?? 0
         },
