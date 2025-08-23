@@ -7,6 +7,8 @@ export const useSubmitVolunteer = () => {
       form: {
         firstName: string;
         lastName: string;
+        email:string;
+        phone_number:string
         age: string;
         country: string;
         role: string;

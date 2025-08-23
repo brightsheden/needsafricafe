@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'NGN',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
   });
   
   export function formatCurrency(amount) {

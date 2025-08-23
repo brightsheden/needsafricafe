@@ -19,6 +19,8 @@ const Volunteer = () => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
+    email:'',
+    phone_number:'',
     age: '',
     country: '',
     role: '',
@@ -44,8 +46,6 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     // Prepare payload for mutation hook
     const { cv, ...form } = formData;
-    console.log(captchaValue)
-    console.log(CAPTCHA_KEY)
 
     if(!captchaValue){
           toast({
@@ -65,6 +65,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     setFormData({
       first_name: '',
       last_name: '',
+      email:'',
+      phone_number:'',
       age: '',
       country: '',
       role: '',
@@ -201,6 +203,34 @@ const handleCaptcha = (token: string | null) => {
                       />
                     </div>
                   </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+
+                      <div>
+                        <Label>Email</Label>
+                        <Input 
+                        required
+                        value={formData.email}
+                        onChange={(e)=> handleChange('email', e.target.value)}
+                        placeholder='Your email'
+
+                        
+                        />
+                      </div>
+
+                       <div>
+                        <Label>Phone number</Label>
+                        <Input 
+                        required
+                        value={formData.phone_number}
+                        onChange={(e)=> handleChange('phone_number', e.target.value)}
+                        type='number'
+                        placeholder='Your phone number'
+                        
+                        
+                        />
+                      </div>
+                    </div>
 
                   <div>
                     <Label>Volunteer Role *</Label>
